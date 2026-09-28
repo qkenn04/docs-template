@@ -1,0 +1,37 @@
+# Hợp đồng API máy đọc của <Tên dự án> (OpenAPI 3.1).
+# Đây là nguồn sự thật cho đường dẫn, tham số và schema; quy ước và hành vi mà OpenAPI không diễn tả được
+# (xác thực, lỗi, phân trang, giới hạn tần suất) nằm ở api.md.
+# Thêm endpoint: thêm vào `paths`, schema dùng chung vào `components.schemas`, rồi cập nhật bảng tổng ở api.md
+# trong cùng PR. Kiểm cú pháp bằng một công cụ lint OpenAPI trong CI.
+openapi: 3.1.0
+info:
+  # Khối "|-" giữ nguyên chữ, nên tên dự án có dấu nháy, dấu hai chấm hay "#" vẫn là YAML hợp lệ.
+  title: |-
+    <Tên dự án> API
+  version: 0.1.0
+  description: Mô tả ngắn API này phục vụ ai và để làm gì.
+paths: {}
+
+# Ví dụ (xoá "paths: {}" ở trên, bỏ comment các dòng dưới rồi sửa):
+#
+# paths:
+#   /health:
+#     get:
+#       summary: Kiểm tra tiến trình còn sống
+#       operationId: getHealth
+#       responses:
+#         "200":
+#           description: Tiến trình chạy bình thường
+#           content:
+#             application/json:
+#               schema:
+#                 $ref: "#/components/schemas/Health"
+# components:
+#   schemas:
+#     Health:
+#       type: object
+#       required: [status]
+#       properties:
+#         status:
+#           type: string
+#           enum: [ok]

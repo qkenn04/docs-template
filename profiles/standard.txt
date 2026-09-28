@@ -1,0 +1,35 @@
+# Hồ sơ STANDARD
+# Mô tả: ứng dụng hoặc dịch vụ thông thường (web app, API, bot); T1 + T2, chưa có ô T3 và ô tuỳ điều kiện
+# Thêm sau khi cần: docs/dev/design-system.md (có UI), docs/dev/perf.md (đã đo), principles.md, design/ (T3).
+README.md
+AGENTS.md
+CLAUDE.md
+.github/pull_request_template.md
+scripts/check-links.py
+docs/README.md
+docs/product/spec.md
+docs/product/nfr.md
+docs/product/glossary.md
+docs/architecture/ARCHITECTURE.md
+docs/architecture/data-model.md
+docs/architecture/diagrams/README.md
+docs/adr/README.md
+docs/adr/0000-template.md
+docs/adr/0001-record-architecture-decisions.md
+docs/api/openapi.yaml
+docs/api/api.md
+docs/dev/testing.md
+docs/dev/configuration.md
+docs/security/threat-model.md
+docs/plan/roadmap.md
+docs/plan/tasks.md
+docs/plan/progress.md
+docs/specs/README.md
+docs/specs/000-template/spec.md
+docs/specs/000-template/plan.md
+docs/specs/000-template/tasks.md
+docs/ops/deployment.md
+docs/ops/runbooks/README.md
+docs/ops/runbooks/000-template.md
+docs/ops/postmortems/README.md
+docs/ops/postmortems/000-template.md

@@ -1,0 +1,19 @@
+# Hồ sơ RETIRING
+# Mô tả: hệ thống đã có quyết định ngừng; giữ đủ để vận hành an toàn tới ngày gỡ, gỡ không sót và để lại hồ sơ
+# README.md, docs/README.md, docs/plan/roadmap.md lấy từ biến thể *.retiring.md (roadmap là kế hoạch ngừng).
+README.md
+AGENTS.md
+CLAUDE.md
+.github/pull_request_template.md
+scripts/check-links.py
+docs/README.md
+docs/adr/README.md
+docs/adr/0000-template.md
+docs/adr/0001-record-architecture-decisions.md
+docs/dev/configuration.md
+docs/plan/roadmap.md
+docs/ops/deployment.md
+docs/ops/runbooks/README.md
+docs/ops/runbooks/000-template.md
+docs/ops/postmortems/README.md
+docs/ops/postmortems/000-template.md

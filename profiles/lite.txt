@@ -1,0 +1,11 @@
+# Hồ sơ LITE
+# Mô tả: thư viện, CLI, script, prototype; nội dung T1 nằm thành mục trong docs/README.md cho tới khi cần tách file
+# docs/README.md lấy từ biến thể template/docs/README.lite.md.
+README.md
+AGENTS.md
+CLAUDE.md
+.github/pull_request_template.md
+scripts/check-links.py
+docs/README.md
+docs/adr/0000-template.md
+docs/adr/0001-record-architecture-decisions.md

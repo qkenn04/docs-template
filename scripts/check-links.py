@@ -125,7 +125,9 @@ def heading_text(raw):
         else:
             p = HTML_TAG.sub("", p)
             p = p.replace("*", "")
-            p = re.sub(r"(?<!\w)_+|_+(?!\w)", "", p)
+            # Chỉ bỏ dấu _ của cặp nhấn mạnh (_chữ_, __chữ__). Dấu _ lẻ, ví dụ trong
+            # NEXT_PUBLIC_*, được GitHub giữ lại trong slug.
+            p = re.sub(r"(?<!\w)(_{1,2})(?=\S)(.+?)(?<=\S)\1(?!\w)", r"\2", p)
             cleaned.append(p)
     return "".join(cleaned)
 

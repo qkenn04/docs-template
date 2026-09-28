@@ -80,6 +80,9 @@ case "$target_abs/" in
 esac
 
 today="$(date +%F)"
+# mktemp luôn tạo file 0600; file .md/.yaml/.yml render qua file tạm được chmod về quyền mà umask
+# của người gọi cho file mới (umask 022 -> 644), giống file chép bằng cp.
+file_mode="$(printf '%o' $(( 0666 & ~0$(umask) )))"
 
 # Đọc hồ sơ: bỏ comment, dòng trống; kiểm đường dẫn; tìm nguồn trước khi chép bất cứ gì.
 paths=()
@@ -160,7 +163,7 @@ for i in "${!paths[@]}"; do
   case "$rel" in
     *.md|*.yaml|*.yml)
       tmp="$(mktemp "$(dirname "$dest")/.new-project-docs.XXXXXX")"
-      render "$src" "$tmp" || { rm -f "$tmp"; die "không ghi được $rel"; }
+      { render "$src" "$tmp" && chmod "$file_mode" "$tmp"; } || { rm -f "$tmp"; die "không ghi được $rel"; }
       mv "$tmp" "$dest"
       ;;
     *)
@@ -177,13 +180,24 @@ fi
 if [ "$skipped" -gt 0 ]; then
   printf 'File đã có được giữ nguyên. So với mẫu nếu cần: diff <file> %s/template/<file>\n' "$KIT_DIR"
 fi
-if [ "$dry_run" -eq 0 ] && [ "$copied" -gt 0 ]; then
+checker="$target_abs/scripts/check-links.py"
+[ -f "$checker" ] || checker="$KIT_DIR/scripts/check-links.py"
+if [ "$dry_run" -eq 0 ] && [ "$profile" = retiring ]; then
+  cat <<EOF
+Tiếp theo (hồ sơ retiring: không thêm tài liệu mới):
+  1. Điền banner đầu README.md (ngày ngừng hẳn, hệ thống thay thế) và kế hoạch ngừng docs/plan/roadmap.md.
+  2. File nào báo "bỏ qua" (repo đã có): dựng hồ sơ retiring ra thư mục tạm rồi chép banner, mục
+     "Giai đoạn ngừng" và kế hoạch ngừng vào repo; cách làm trong PROFILES.md của bộ khuôn, mục RETIRING.
+  3. Tìm chỗ cần điền: grep -nE '<[^!/-]|YYYY-MM-DD|CẦN XÁC NHẬN' "$target_abs/README.md" "$target_abs/docs/plan/roadmap.md"
+  4. Kiểm link: python3 "$checker" "$target_abs"
+EOF
+elif [ "$dry_run" -eq 0 ] && [ "$copied" -gt 0 ]; then
   cat <<EOF
 Tiếp theo:
   1. Mở docs/README.md (bản đồ tài liệu), xoá hàng không dùng; bắt đầu điền từ docs/product/spec.md
      (hồ sơ lite: mục đầu của docs/README.md).
   2. Tìm chỗ cần điền: grep -rnE '<[^!/-]|YYYY-MM-DD|CẦN XÁC NHẬN' "$target_abs/docs"
   3. Viết AGENTS.md sau cùng, khi docs/ đã có nội dung.
-  4. Kiểm link: python3 "$target_abs/scripts/check-links.py" "$target_abs"
+  4. Kiểm link: python3 "$checker" "$target_abs"
 EOF
 fi

@@ -6,7 +6,7 @@
 #
 # Với mỗi hồ sơ trong profiles/:
 #   1. --dry-run không ghi gì;
-#   2. dựng thật: số file bằng số dòng của hồ sơ;
+#   2. dựng thật: số file bằng số dòng của hồ sơ; quyền theo umask 022 (thư mục 755, file 644, .py 755);
 #   3. không còn "<Tên dự án>", "<Ngày tạo>"; dòng metadata đầu mỗi file .md có ngày hôm nay;
 #   4. check-links.py sạch trên kết quả (link chỉ trỏ tới file có trong hồ sơ);
 #   5. openapi.yaml (nếu có) là YAML hợp lệ, openapi 3.1 (cần PyYAML; thiếu thì bỏ qua bước này);
@@ -14,6 +14,7 @@
 # Cuối cùng: check-links.py sạch trên chính bộ khuôn.
 set -euo pipefail
 
+umask 022
 KIT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 SCAFFOLD="$KIT_DIR/scripts/new-project-docs.sh"
 CHECK="$KIT_DIR/scripts/check-links.py"
@@ -41,6 +42,9 @@ for pf in "$KIT_DIR"/profiles/*.txt; do
   "$SCAFFOLD" "$p" "$dir" "$NAME" > "$work/$p.run1.log"
   actual="$(find "$dir" -type f | wc -l | tr -d ' ')"
   [ "$actual" = "$expected" ] || fail "$p: cần $expected file, có $actual"
+  bad_modes="$(find "$dir" \( \( -type d ! -perm 755 \) -o \( -type f ! -name '*.py' ! -perm 644 \) \
+    -o \( -type f -name '*.py' ! -perm 755 \) \) -printf '%m %P  ')"
+  [ -z "$bad_modes" ] || fail "$p: quyền sai với umask 022: $bad_modes"
 
   if grep -rlF -e '<Tên dự án>' -e '<Ngày tạo>' "$dir" > "$work/$p.left" 2>/dev/null; then
     fail "$p: còn placeholder tên hoặc ngày trong: $(tr '\n' ' ' < "$work/$p.left")"

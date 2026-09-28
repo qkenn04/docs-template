@@ -1,16 +1,18 @@
 # docs-template
 
-> Trạng thái: Đang áp dụng · Cập nhật: 2026-09-28 · Liên quan: [Mẫu docs/README](template/docs/README.md), [Hồ sơ FULL](profiles/full.txt), [Script dựng](scripts/new-project-docs.sh), [Kiểm link](scripts/check-links.py), [Mẫu PR](.github/pull_request_template.md)
+> Trạng thái: Đang áp dụng · Cập nhật: 2026-09-28 · Liên quan: [Chọn hồ sơ](PROFILES.md), [Mẫu docs/README](template/docs/README.md), [Hồ sơ FULL](profiles/full.txt), [Script dựng](scripts/new-project-docs.sh), [Kiểm link](scripts/check-links.py), [Mẫu PR](.github/pull_request_template.md)
 
 Bộ khuôn tài liệu phân tầng để dùng lại cho mọi dự án. Repo này **không** là tài liệu của một dự án nào. Nó gồm ba thứ:
 
 - **Mẫu** cho từng ô của khung tài liệu (`template/`): mỗi file có sẵn các mục, comment hướng dẫn bằng tiếng Việt, placeholder và ví dụ được đánh dấu là ví dụ.
-- **Hồ sơ** (`profiles/`): mỗi loại dự án cần những ô nào.
+- **Hồ sơ** (`profiles/`): mỗi loại dự án cần những ô nào. Chọn hồ sơ nào: [PROFILES.md](PROFILES.md).
 - **Script** (`scripts/`): dựng bộ tài liệu theo hồ sơ vào một repo mới hoặc có sẵn, và kiểm link.
 
 Bộ khuôn dùng được ngay; nó không có bước "hoàn tất tài liệu". Việc điền nội dung thuộc về từng dự án, sau khi dựng.
 
 ## Bắt đầu nhanh
+
+**Chọn hồ sơ trước:** [PROFILES.md](PROFILES.md) giải thích 5 hồ sơ (FULL, STANDARD, PLATFORM, LITE, RETIRING): dùng khi nào, tạo file gì, bỏ gì, sơ đồ chọn nhanh và cách lên mức khi dự án lớn dần.
 
 ```bash
 git clone <url-của-repo-này> docs-template
@@ -62,38 +64,40 @@ Nhãn tầng lấy theo khung gốc. Chỗ khung gốc không ghi nhãn, bộ kh
 
 ## 2. Hồ sơ
 
+Hướng dẫn chọn đầy đủ (sơ đồ quyết định, ví dụ, file bị bỏ và vì sao, câu hỏi thường gặp): **[PROFILES.md](PROFILES.md)**.
+
 | Hồ sơ | Chọn khi | Số file |
 |---|---|---|
 | **FULL** | Sản phẩm có người dùng, có giao diện, API và vận hành, nhiều mốc. Đủ mọi ô T1, T2, T3 | 37 |
 | **STANDARD** | Ứng dụng hoặc dịch vụ thông thường (web app, API, bot). T1 + T2; chưa có ô T3 và ô tuỳ điều kiện (design-system, perf) | 32 |
 | **PLATFORM** | Repo hạ tầng hoặc nền tảng: cấu hình máy chủ, CI dùng chung, giám sát. Nặng vận hành và bảo mật; không có API công khai, mô hình dữ liệu hay spec tính năng | 25 |
 | **LITE** | Thư viện, CLI, script, prototype. Một file `docs/README.md` chứa các mục T1 (mục tiêu, NFR, kiến trúc, thuật ngữ, quyết định, lệnh, tiến độ) + ADR | 8 |
-| **RETIRING** | Hệ thống đã có quyết định ngừng. Giữ đủ để vận hành an toàn tới ngày gỡ, gỡ không sót, để lại hồ sơ. Lộ trình là kế hoạch ngừng R0–R5 | 16 |
+| **RETIRING** | Hệ thống đã có quyết định ngừng. Không thêm tài liệu mới: README có banner "Đang ngừng", AGENTS.md giới hạn việc được làm, và kế hoạch ngừng thay cho lộ trình. Tài liệu đã có giữ nguyên | 4 |
 
 File mỗi hồ sơ tạo (nguồn sự thật: `profiles/<hồ-sơ>.txt`):
 
 | File | Tầng | FULL | STANDARD | PLATFORM | LITE | RETIRING |
 |---|---|:-:|:-:|:-:|:-:|:-:|
 | `README.md` | T1 | x | x | x | x | biến thể |
-| `AGENTS.md` | T1 | x | x | x | x | x |
+| `AGENTS.md` | T1 | x | x | x | x | biến thể |
 | `CLAUDE.md` | T1\* | x | x | x | x | x |
-| `.github/pull_request_template.md` | kèm | x | x | x | x | x |
-| `scripts/check-links.py` | kèm | x | x | x | x | x |
-| `docs/README.md` | T2 | x | x | x | biến thể | biến thể |
+| `.github/pull_request_template.md` | kèm | x | x | x | x | |
+| `scripts/check-links.py` | kèm | x | x | x | x | |
+| `docs/README.md` | T2 | x | x | x | biến thể | |
 | `docs/product/spec.md` | T1 | x | x | x | mục | |
 | `docs/product/nfr.md` | T1 | x | x | x | mục | |
 | `docs/product/glossary.md` | T1\* | x | x | x | mục | |
-| `docs/architecture/ARCHITECTURE.md` | T1 | x | x | x | mục | mục |
+| `docs/architecture/ARCHITECTURE.md` | T1 | x | x | x | mục | |
 | `docs/architecture/data-model.md` | T2 | x | x | | | |
 | `docs/architecture/principles.md` | T3 | x | | | | |
 | `docs/architecture/diagrams/README.md` | T2 | x | x | x | | |
-| `docs/adr/README.md` | T1 | x | x | x | mục | x |
-| `docs/adr/0000-template.md` | T1 | x | x | x | x | x |
-| `docs/adr/0001-record-architecture-decisions.md` | T1 | x | x | x | x | x |
+| `docs/adr/README.md` | T1 | x | x | x | mục | |
+| `docs/adr/0000-template.md` | T1 | x | x | x | x | |
+| `docs/adr/0001-record-architecture-decisions.md` | T1 | x | x | x | x | |
 | `docs/api/openapi.yaml` | T2 | x | x | | | |
 | `docs/api/api.md` | T2 | x | x | | | |
 | `docs/dev/testing.md` | T2 | x | x | x | mục | |
-| `docs/dev/configuration.md` | T2 | x | x | x | mục | x |
+| `docs/dev/configuration.md` | T2 | x | x | x | mục | |
 | `docs/dev/design-system.md` | T2 | x | | | | |
 | `docs/dev/perf.md` | T2 | x | | | | |
 | `docs/security/threat-model.md` | T2/T3 | x | x | x | | |
@@ -106,16 +110,18 @@ File mỗi hồ sơ tạo (nguồn sự thật: `profiles/<hồ-sơ>.txt`):
 | `docs/specs/000-template/tasks.md` | T2 | x | x | | | |
 | `docs/design/README.md` | T3 | x | | | | |
 | `docs/design/0000-rfc-template.md` | T3 | x | | | | |
-| `docs/ops/deployment.md` | T2 | x | x | x | mục | x |
-| `docs/ops/runbooks/README.md` | T2 | x | x | x | | x |
-| `docs/ops/runbooks/000-template.md` | T2 | x | x | x | | x |
-| `docs/ops/postmortems/README.md` | T1\* | x | x | x | | x |
-| `docs/ops/postmortems/000-template.md` | T1\* | x | x | x | | x |
-| **Số file** | | 37 | 32 | 25 | 8 | 16 |
+| `docs/ops/deployment.md` | T2 | x | x | x | mục | |
+| `docs/ops/runbooks/README.md` | T2 | x | x | x | | |
+| `docs/ops/runbooks/000-template.md` | T2 | x | x | x | | |
+| `docs/ops/postmortems/README.md` | T1\* | x | x | x | | |
+| `docs/ops/postmortems/000-template.md` | T1\* | x | x | x | | |
+| **Số file** | | 37 | 32 | 25 | 8 | 4 |
 
-`x` = file riêng từ `template/`. `biến thể` = file riêng lấy từ biến thể của hồ sơ (`template/README.retiring.md`, `template/docs/README.lite.md`, `template/docs/README.retiring.md`, `template/docs/plan/roadmap.retiring.md`). `mục` = nội dung nằm thành một mục trong `docs/README.md` của hồ sơ đó, tách thành file khi đủ điều kiện ở mục 3.
+`x` = file riêng từ `template/`. `biến thể` = file riêng lấy từ biến thể của hồ sơ (`template/README.retiring.md`, `template/AGENTS.retiring.md`, `template/docs/README.lite.md`, `template/docs/plan/roadmap.retiring.md`). `mục` = nội dung nằm thành một mục trong `docs/README.md` của hồ sơ đó, tách thành file khi đủ điều kiện ở mục 3.
 
-**Đổi hồ sơ.** Script chỉ thêm file còn thiếu, nên chạy lại với hồ sơ lớn hơn (ví dụ `standard` rồi `full`) sẽ bổ sung các ô mới mà không đụng file đã có. Riêng `docs/README.md` không bị thay: khi lên từ LITE, chuyển các mục của nó sang file mới theo quy tắc tách file.
+RETIRING cố ý không đủ các ô T1: hệ thống sắp ngừng không nên nhận tài liệu mới. Ba file biến thể của nó chỉ link tới nhau; tài liệu dự án đã có (triển khai, runbook, cấu hình, ADR) được nhắc bằng đường dẫn dạng `code`, nên bộ 4 file không có link hỏng dù dự án có hay không có các file đó.
+
+**Đổi hồ sơ.** Script chỉ thêm file còn thiếu, nên chạy lại với hồ sơ lớn hơn (ví dụ `standard` rồi `full`) sẽ bổ sung các ô mới mà không đụng file đã có. LITE, PLATFORM, STANDARD, FULL lồng nhau theo thứ tự đó. Riêng `docs/README.md` không bị thay: khi lên từ LITE, chuyển các mục của nó sang file mới theo quy tắc tách file ([PROFILES.md, mục 8](PROFILES.md#8-lên-mức-khi-dự-án-lớn-dần)).
 
 ## 3. Quy tắc tách file
 
@@ -205,17 +211,20 @@ Mỗi loại thông tin có đúng một nơi là nguồn sự thật; nơi khá
 
 1. Một lần: trên GitHub, repo docs-template → Settings → General → tick **Template repository**.
 2. Mỗi dự án mới: **Use this template** → **Create a new repository** → clone về máy.
-3. Trong repo mới, dựng tài liệu ra thư mục tạm rồi thay phần bộ khuôn bằng nó:
+3. Trong repo mới (đứng ở gốc repo), dựng tài liệu ra thư mục tạm, gỡ phần riêng của bộ khuôn, rồi chép bộ tài liệu vào:
 
 ```bash
 tmp="$(mktemp -d)"
-scripts/new-project-docs.sh standard "$tmp" "Tên dự án"          # chọn hồ sơ ở mục 2
-git rm -rq README.md template profiles scripts/new-project-docs.sh scripts/test-profiles.sh
-cp -a "$tmp"/. . && rm -rf "${tmp:?}"
+scripts/new-project-docs.sh standard "$tmp" "Tên dự án"    # chọn hồ sơ theo PROFILES.md
+git rm -rq README.md PROFILES.md template profiles scripts/new-project-docs.sh scripts/test-profiles.sh
+cp -R "$tmp"/. . && rm -rf "${tmp:?}"
+python3 scripts/check-links.py .
 git add -A && git commit -m "Add project docs from docs-template (standard profile)"
 ```
 
-`scripts/check-links.py` và `.github/pull_request_template.md` được giữ (dự án dùng chúng). `LICENSE` của bộ khuôn còn lại: giữ nếu dự án cũng dùng MIT, sửa tên người giữ bản quyền hoặc thay giấy phép nếu không. Script từ chối dựng thẳng vào chính thư mục bộ khuôn, nên cần bước thư mục tạm ở trên.
+Dùng `cp -R`, không dùng `cp -a`: `mktemp -d` tạo thư mục quyền 0700, và `cp -a` chép cả quyền đó lên thư mục gốc của repo. `cp -R` không đổi quyền thư mục đã có; file và thư mục mới theo umask (umask 022: file 0644, thư mục 0755, `check-links.py` giữ bit chạy).
+
+`scripts/check-links.py` và `.github/pull_request_template.md` được giữ (dự án dùng chúng; bản trong thư mục tạm chép đè lên với nội dung như cũ). Hồ sơ `retiring` không có hai file này: xoá chúng bằng `git rm` nếu không dùng. `LICENSE` của bộ khuôn còn lại: giữ nếu dự án cũng dùng MIT, sửa tên người giữ bản quyền hoặc thay giấy phép nếu không. Script từ chối dựng thẳng vào chính thư mục bộ khuôn, nên cần bước thư mục tạm ở trên.
 
 ### 8.2 Repo có sẵn: script
 
@@ -241,6 +250,8 @@ File đã có ở đích **không bao giờ bị ghi đè**; script báo "bỏ q
 3. ADR cho các quyết định đã có (ghi lại sau, có dòng "Ghi lại:"); đọc lại ADR 0001 và điền người quyết định.
 4. `docs/plan/roadmap.md` và `docs/plan/tasks.md`; các ô T2 còn lại khi dự án chạm tới khía cạnh đó.
 5. `README.md` ở gốc (quick start), rồi **`AGENTS.md` sau cùng**, khi `docs/` đã có nội dung.
+
+Hồ sơ RETIRING không theo thứ tự trên: chỉ điền banner ở `README.md`, mục đầu của `AGENTS.md` và kế hoạch ngừng `docs/plan/roadmap.md` ([PROFILES.md, mục 7](PROFILES.md#7-retiring)).
 6. Xoá hàng không dùng trong bản đồ của `docs/README.md`; tìm chỗ còn trống:
 
 ```bash
@@ -268,7 +279,7 @@ jobs:
 - **Cuối mỗi mốc:** cập nhật `plan/progress.md`; rà quyết định nào chưa thành ADR, `[CẦN XÁC NHẬN]` nào đã có câu trả lời.
 - **Mỗi tháng:** liệt kê file theo ngày `Cập nhật` (lệnh trong `docs/README.md`, mục "Cách giữ tài liệu sống"); file cũ mà code liên quan đã đổi thì sửa, hoặc chuyển "Lưu trữ".
 - **Sau sự cố:** postmortem và sửa runbook.
-- **Ngừng tính năng hay hệ thống:** chuyển tài liệu sang "Lưu trữ", không xoá. Cả hệ thống ngừng: chạy script với hồ sơ `retiring` để thêm kế hoạch ngừng (file đã có được giữ nguyên).
+- **Ngừng tính năng hay hệ thống:** chuyển tài liệu sang "Lưu trữ", không xoá. Cả hệ thống ngừng: dùng hồ sơ `retiring` (banner "Đang ngừng" ở README, kế hoạch ngừng thay lộ trình). Repo đã có `README.md`, `AGENTS.md`, `docs/plan/roadmap.md` thì script bỏ qua cả ba; dựng ra thư mục tạm rồi chép phần cần theo [PROFILES.md, mục 7](PROFILES.md#7-retiring).
 
 ## 10. Bảo trì bộ khuôn
 
@@ -277,6 +288,7 @@ jobs:
 ```text
 docs-template/
 ├── README.md                     tài liệu của bộ khuôn (file này)
+├── PROFILES.md                   chọn hồ sơ: dùng khi nào, tạo gì, bỏ gì, lên mức
 ├── LICENSE                       MIT
 ├── .github/pull_request_template.md   checklist DoD; dự án dùng chung
 ├── profiles/                     full, standard, platform, lite, retiring (.txt)
@@ -286,19 +298,19 @@ docs-template/
 │   └── test-profiles.sh          tự kiểm bộ khuôn
 └── template/                     cây mẫu, đúng như cây của một dự án FULL
     ├── README.md, AGENTS.md, CLAUDE.md
-    ├── README.retiring.md        biến thể (tên.<hồ-sơ>.đuôi, nằm cạnh file gốc)
-    └── docs/ …                   (thêm README.lite.md, README.retiring.md, plan/roadmap.retiring.md)
+    ├── README.retiring.md, AGENTS.retiring.md   biến thể (tên.<hồ-sơ>.đuôi, nằm cạnh file gốc)
+    └── docs/ …                   (thêm README.lite.md, plan/roadmap.retiring.md)
 ```
 
 ### 10.2 Sửa hoặc thêm mẫu
 
-1. Sửa file trong `template/`. File mới: thêm đường dẫn vào các `profiles/*.txt` phù hợp và vào bảng ở mục 2.
+1. Sửa file trong `template/`. File mới: thêm đường dẫn vào các `profiles/*.txt` phù hợp, vào bảng ở mục 2 và vào danh sách file của hồ sơ trong [PROFILES.md](PROFILES.md).
 2. **Link trong mẫu chỉ trỏ tới file có mặt ở mọi hồ sơ chứa file nguồn.** Ô có thể vắng ở một hồ sơ thì viết đường dẫn dạng `code`, không viết link. Ví dụ: `docs/README.md` (dùng cho FULL, STANDARD, PLATFORM) chỉ link tới file cả ba hồ sơ đều có; `api/`, `specs/`, `data-model.md` ghi dạng code.
 3. File mẫu để chép (`0000-template.md`, `000-template/`, `0000-rfc-template.md`) có dòng marker `<!-- check-links: template -->` riêng một dòng: `check-links.py` cho phép placeholder trong link của file đó. Marker còn sót trong file không mang tên "template" là lỗi, nhờ vậy file chép từ mẫu mà quên điền sẽ bị bắt.
 4. Chạy tự kiểm; mọi hồ sơ phải đạt:
 
 ```bash
-scripts/test-profiles.sh          # dựng từng hồ sơ vào thư mục tạm, kiểm file, placeholder, ngày, link, openapi, chạy lại không ghi đè
+scripts/test-profiles.sh          # dựng từng hồ sơ vào thư mục tạm, kiểm số file, quyền file, placeholder, ngày, link, openapi, chạy lại không ghi đè
 python3 scripts/check-links.py .  # kiểm link trên chính bộ khuôn
 ```
 

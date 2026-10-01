@@ -1,6 +1,6 @@
 # Hồ sơ STANDARD
 # Mô tả: ứng dụng hoặc dịch vụ thông thường (web app, API, bot); T1 + T2, chưa có ô T3 và ô tuỳ điều kiện
-# Thêm sau khi cần: docs/dev/design-system.md (có UI), docs/dev/perf.md (đã đo), principles.md, design/ (T3).
+# Thêm sau khi cần: docs/dev/design-system.md (có UI), docs/dev/frontend.md (có ứng dụng giao diện), docs/dev/perf.md (đã đo), principles.md, design/ (T3).
 README.md
 AGENTS.md
 CLAUDE.md

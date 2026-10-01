@@ -1,6 +1,6 @@
 # docs-template
 
-> Trạng thái: Đang áp dụng · Cập nhật: 2026-09-28 · Liên quan: [Chọn hồ sơ](PROFILES.md), [Mẫu docs/README](template/docs/README.md), [Hồ sơ FULL](profiles/full.txt), [Script dựng](scripts/new-project-docs.sh), [Kiểm link](scripts/check-links.py), [Mẫu PR](.github/pull_request_template.md)
+> Trạng thái: Đang áp dụng · Cập nhật: 2026-10-01 · Liên quan: [Chọn hồ sơ](PROFILES.md), [Mẫu docs/README](template/docs/README.md), [Hồ sơ FULL](profiles/full.txt), [Script dựng](scripts/new-project-docs.sh), [Kiểm link](scripts/check-links.py), [Mẫu PR](.github/pull_request_template.md)
 
 Bộ khuôn tài liệu phân tầng để dùng lại cho mọi dự án. Repo này **không** là tài liệu của một dự án nào. Nó gồm ba thứ:
 
@@ -45,7 +45,7 @@ Mục lục: [1. Khung tài liệu](#1-khung-tài-liệu) · [2. Hồ sơ](#2-h�
     │   └── diagrams/                T2   Mermaid, kiểu C4
     ├── adr/                         T1   README (mục lục), 0000-template, 0001-record-architecture-decisions, NNNN-<name>
     ├── api/                         T2   openapi.yaml (OpenAPI 3.1), api.md
-    ├── dev/                         T2   testing, configuration, design-system (khi có UI), perf (số đã đo)
+    ├── dev/                         T2   testing, configuration, design-system (khi có UI), frontend (khi có ứng dụng giao diện), perf (số đã đo)
     ├── security/threat-model.md     T2/T3
     ├── plan/                        T2   roadmap, tasks, progress
     ├── specs/NNN-<name>/            T2   spec, plan, tasks (mẫu: 000-template/)
@@ -57,7 +57,7 @@ Mục lục: [1. Khung tài liệu](#1-khung-tài-liệu) · [2. Hồ sơ](#2-h�
 |---|---|---|
 | **T1** | Bắt buộc với mọi dự án. Ở hồ sơ LITE, nội dung T1 được phép là một mục trong `docs/README.md` cho tới khi đủ điều kiện tách file | spec, nfr, ARCHITECTURE, adr |
 | **T1\*** | Bắt buộc có điều kiện: điều kiện xảy ra thì phải có | glossary (khi có thuật ngữ riêng), postmortem (sau mỗi sự cố P1/P2), CLAUDE.md (khi dùng Claude Code) |
-| **T2** | Nên có khi dự án có khía cạnh đó | api/ khi có API; design-system khi có giao diện; perf khi đã đo; threat model khi có người dùng hoặc dữ liệu |
+| **T2** | Nên có khi dự án có khía cạnh đó | api/ khi có API; design-system khi có giao diện; frontend khi có ứng dụng giao diện có state; perf khi đã đo; threat model khi có người dùng hoặc dữ liệu |
 | **T3** | Tuỳ chọn, cho dự án lớn | principles, design/ (RFC), threat model đầy đủ theo STRIDE |
 
 Nhãn tầng lấy theo khung gốc. Chỗ khung gốc không ghi nhãn, bộ khuôn gán: `README.md` và `AGENTS.md` ở gốc là T1; `adr/README.md` (mục lục) thuộc ô T1 của adr; `specs/` là T2; `postmortems/` và `CLAUDE.md` là T1\*; mẫu PR và `check-links.py` là file đi kèm.
@@ -68,8 +68,8 @@ Hướng dẫn chọn đầy đủ (sơ đồ quyết định, ví dụ, file b�
 
 | Hồ sơ | Chọn khi | Số file |
 |---|---|---|
-| **FULL** | Sản phẩm có người dùng, có giao diện, API và vận hành, nhiều mốc. Đủ mọi ô T1, T2, T3 | 37 |
-| **STANDARD** | Ứng dụng hoặc dịch vụ thông thường (web app, API, bot). T1 + T2; chưa có ô T3 và ô tuỳ điều kiện (design-system, perf) | 32 |
+| **FULL** | Sản phẩm có người dùng, có giao diện, API và vận hành, nhiều mốc. Đủ mọi ô T1, T2, T3 | 38 |
+| **STANDARD** | Ứng dụng hoặc dịch vụ thông thường (web app, API, bot). T1 + T2; chưa có ô T3 và ô tuỳ điều kiện (design-system, frontend, perf) | 32 |
 | **PLATFORM** | Repo hạ tầng hoặc nền tảng: cấu hình máy chủ, CI dùng chung, giám sát. Nặng vận hành và bảo mật; không có API công khai, mô hình dữ liệu hay spec tính năng | 25 |
 | **LITE** | Thư viện, CLI, script, prototype. Một file `docs/README.md` chứa các mục T1 (mục tiêu, NFR, kiến trúc, thuật ngữ, quyết định, lệnh, tiến độ) + ADR | 8 |
 | **RETIRING** | Hệ thống đã có quyết định ngừng. Không thêm tài liệu mới: README có banner "Đang ngừng", AGENTS.md giới hạn việc được làm, và kế hoạch ngừng thay cho lộ trình. Tài liệu đã có giữ nguyên | 4 |
@@ -99,6 +99,7 @@ File mỗi hồ sơ tạo (nguồn sự thật: `profiles/<hồ-sơ>.txt`):
 | `docs/dev/testing.md` | T2 | x | x | x | mục | |
 | `docs/dev/configuration.md` | T2 | x | x | x | mục | |
 | `docs/dev/design-system.md` | T2 | x | | | | |
+| `docs/dev/frontend.md` | T2 | x | | | | |
 | `docs/dev/perf.md` | T2 | x | | | | |
 | `docs/security/threat-model.md` | T2/T3 | x | x | x | | |
 | `docs/plan/roadmap.md` | T2 | x | x | x | | biến thể |
@@ -115,7 +116,7 @@ File mỗi hồ sơ tạo (nguồn sự thật: `profiles/<hồ-sơ>.txt`):
 | `docs/ops/runbooks/000-template.md` | T2 | x | x | x | | |
 | `docs/ops/postmortems/README.md` | T1\* | x | x | x | | |
 | `docs/ops/postmortems/000-template.md` | T1\* | x | x | x | | |
-| **Số file** | | 37 | 32 | 25 | 8 | 4 |
+| **Số file** | | 38 | 32 | 25 | 8 | 4 |
 
 `x` = file riêng từ `template/`. `biến thể` = file riêng lấy từ biến thể của hồ sơ (`template/README.retiring.md`, `template/AGENTS.retiring.md`, `template/docs/README.lite.md`, `template/docs/plan/roadmap.retiring.md`). `mục` = nội dung nằm thành một mục trong `docs/README.md` của hồ sơ đó, tách thành file khi đủ điều kiện ở mục 3.
 
@@ -171,6 +172,7 @@ Một thay đổi chỉ xong khi tài liệu tương ứng đã sửa **trong c�
 | Bề mặt tấn công, bí mật, quyền | `security/threat-model.md` |
 | Ngân sách hoặc số đo hiệu năng | `product/nfr.md` (ngân sách), `dev/perf.md` (số đo) |
 | Giao diện, design token | `dev/design-system.md` |
+| Cấu trúc thư mục front-end, luật import giữa các tầng | `dev/frontend.md` |
 | Thuật ngữ mới | `product/glossary.md` |
 | Cách test, lệnh test | `dev/testing.md` |
 | Xong việc, đổi mốc | `plan/progress.md`, `plan/tasks.md`, `tasks.md` của spec |

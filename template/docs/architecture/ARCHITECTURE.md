@@ -122,6 +122,8 @@ Ranh giới tin cậy và lớp bảo vệ chính; chi tiết ở [Mô hình đe
 └── scripts/          script tiện ích (kiểm link tài liệu, ...)
 ```
 
+Cấu trúc bên trong ứng dụng giao diện (tầng, feature, luật import) không chép vào đây mà nằm ở `dev/frontend.md` (nếu dự án có).
+
 ## 10. Công nghệ và phiên bản
 
 | Thành phần | Công nghệ | Phiên bản | Ghim bằng | ADR |

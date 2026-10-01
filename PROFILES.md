@@ -1,8 +1,8 @@
 # Chọn hồ sơ tài liệu
 
-> Trạng thái: Đang áp dụng · Cập nhật: 2026-09-28 · Liên quan: [README](README.md), [Khung tài liệu](README.md#1-khung-tài-liệu), [Bảng file theo hồ sơ](README.md#2-hồ-sơ), [Script dựng](scripts/new-project-docs.sh)
+> Trạng thái: Đang áp dụng · Cập nhật: 2026-10-01 · Liên quan: [README](README.md), [Khung tài liệu](README.md#1-khung-tài-liệu), [Bảng file theo hồ sơ](README.md#2-hồ-sơ), [Script dựng](scripts/new-project-docs.sh)
 
-Bộ tài liệu đầy đủ của bộ khuôn có 37 file, nhưng không dự án nào nên mang đủ 37 file ngay từ đầu. Một CLI nhỏ mà có `threat-model.md`, `runbooks/`, `specs/` và `design/` thì phần lớn là file rỗng: không ai điền, không ai đọc, và làm người mới khó thấy đâu là tài liệu thật. Ngược lại, một dịch vụ đang chạy thật mà thiếu runbook hay tài liệu cấu hình thì sẽ trả giá lúc có sự cố.
+Bộ tài liệu đầy đủ của bộ khuôn có 38 file, nhưng không dự án nào nên mang đủ 38 file ngay từ đầu. Một CLI nhỏ mà có `threat-model.md`, `runbooks/`, `specs/` và `design/` thì phần lớn là file rỗng: không ai điền, không ai đọc, và làm người mới khó thấy đâu là tài liệu thật. Ngược lại, một dịch vụ đang chạy thật mà thiếu runbook hay tài liệu cấu hình thì sẽ trả giá lúc có sự cố.
 
 **Hồ sơ** giải quyết chuyện đó: mỗi hồ sơ là một danh sách file (`profiles/<hồ-sơ>.txt`) hợp với một cỡ và một giai đoạn sống của dự án. Chọn theo hai câu hỏi:
 
@@ -52,10 +52,10 @@ Tầng lấy theo [khung tài liệu](README.md#1-khung-tài-liệu): T1 bắt b
 
 | | FULL | STANDARD | PLATFORM | LITE | RETIRING |
 |---|:-:|:-:|:-:|:-:|:-:|
-| **Số file** | 37 | 32 | 25 | 8 | 4 |
+| **Số file** | 38 | 32 | 25 | 8 | 4 |
 | **T1** (8 ô) | 8/8 | 8/8 | 8/8 | 4/8, còn lại là mục | 2/8, biến thể |
 | **T1\*** (4 ô) | 4/4 | 4/4 | 4/4 | 1/4, thuật ngữ là mục | 1/4 |
-| **T2** (20 ô, gồm threat model) | 20/20 | 18/20 | 11/20 | 1/20, 4 ô là mục | 1/20, kế hoạch ngừng |
+| **T2** (21 ô, gồm threat model) | 21/21 | 18/21 | 11/21 | 1/21, 4 ô là mục | 1/21, kế hoạch ngừng |
 | **T3** (3 ô) | 3/3 | 0/3 | 0/3 | 0/3 | 0/3 |
 | **File kèm** (mẫu PR, `check-links.py`) | 2/2 | 2/2 | 2/2 | 2/2 | 0/2 |
 | **Dự án điển hình** | Sản phẩm chính nhiều tính năng, có người dùng ngoài | Web app, API, bot đang chạy thật | Cấu hình máy chủ, CI dùng chung, giám sát | Tool nhỏ, thư viện, CLI, site tĩnh, prototype | Hệ thống đã quyết định ngừng |
@@ -75,7 +75,7 @@ Mọi lệnh dưới đây chạy từ thư mục chứa bản clone `docs-templ
 **Tạo những file gì** ([profiles/full.txt](profiles/full.txt)):
 
 <details>
-<summary>37 file (bấm để mở)</summary>
+<summary>38 file (bấm để mở)</summary>
 
 | File | Dùng để |
 |---|---|
@@ -100,6 +100,7 @@ Mọi lệnh dưới đây chạy từ thư mục chứa bản clone `docs-templ
 | `docs/dev/testing.md` | Chiến lược test, lệnh test, cổng chất lượng trong CI |
 | `docs/dev/configuration.md` | Biến môi trường, cờ cấu hình, bí mật (chỉ tên, không giá trị) |
 | `docs/dev/design-system.md` | Design token và thành phần giao diện |
+| `docs/dev/frontend.md` | Cấu trúc thư mục front-end: tầng app, features, shared; luật import; bộ khung một feature |
 | `docs/dev/perf.md` | Số đo hiệu năng thật so với ngân sách trong `nfr.md` |
 | `docs/security/threat-model.md` | Tài sản, tác nhân, đe doạ, lớp bảo vệ |
 | `docs/plan/roadmap.md` | Thứ tự mốc, phụ thuộc, điều kiện xong của mỗi mốc |
@@ -119,7 +120,7 @@ Mọi lệnh dưới đây chạy từ thư mục chứa bản clone `docs-templ
 
 </details>
 
-**Bỏ qua những gì và vì sao.** Không bỏ ô nào. Một số ô chỉ có nghĩa khi điều kiện xảy ra: `design-system.md` khi có giao diện riêng, `perf.md` khi đã có số đo, `glossary.md` khi có thuật ngữ riêng. Chưa tới lúc thì để file ở trạng thái Nháp hoặc xoá hàng tương ứng trong bản đồ của `docs/README.md`.
+**Bỏ qua những gì và vì sao.** Không bỏ ô nào. Một số ô chỉ có nghĩa khi điều kiện xảy ra: `design-system.md` khi có giao diện riêng, `frontend.md` khi có ứng dụng giao diện có state, `perf.md` khi đã có số đo, `glossary.md` khi có thuật ngữ riêng. Chưa tới lúc thì để file ở trạng thái Nháp hoặc xoá hàng tương ứng trong bản đồ của `docs/README.md`.
 
 ```bash
 docs-template/scripts/new-project-docs.sh full ../my-app "My App"
@@ -175,11 +176,12 @@ docs-template/scripts/new-project-docs.sh full ../my-app "My App"
 
 </details>
 
-**Bỏ qua những gì và vì sao** (so với FULL, 5 file):
+**Bỏ qua những gì và vì sao** (so với FULL, 6 file):
 
 | Bỏ | Vì sao | Thêm khi |
 |---|---|---|
 | `docs/dev/design-system.md` | Nhiều dịch vụ không có giao diện riêng, hoặc dùng thư viện UI có sẵn | Có design token, thành phần giao diện dùng lại |
+| `docs/dev/frontend.md` | Dịch vụ không có ứng dụng giao diện, hoặc giao diện chỉ vài màn | Có ứng dụng giao diện có state (form, gọi API) và từ hai tính năng trở lên |
 | `docs/dev/perf.md` | File số đo mà chưa đo thì rỗng; ngân sách hiệu năng đã nằm trong `nfr.md` | Đã có lần đo đầu tiên |
 | `docs/architecture/principles.md` | T3; với một nhóm nhỏ, ADR đã đủ giữ lý do | Nhiều người phải theo cùng nguyên tắc mà ADR không tiện tra |
 | `docs/design/README.md`, `docs/design/0000-rfc-template.md` | T3; RFC chỉ đáng công khi thay đổi lớn cần nhiều người góp ý trước | Thay đổi lớn cần bàn trước khi quyết |
@@ -375,7 +377,7 @@ Tiếp theo:
   4. Kiểm link: python3 "/path/to/my-app/scripts/check-links.py" "/path/to/my-app"
 ```
 
-(Đường dẫn tuyệt đối trong kết quả được thay bằng `/path/to/…`.) Tám file của LITE được giữ; 24 file mới là mẫu trống. Chạy tiếp `full` sẽ thêm 5 file còn lại ("Tổng: 5 chép, 32 bỏ qua").
+(Đường dẫn tuyệt đối trong kết quả được thay bằng `/path/to/…`.) Tám file của LITE được giữ; 24 file mới là mẫu trống. Chạy tiếp `full` sẽ thêm 6 file còn lại ("Tổng: 6 chép, 32 bỏ qua").
 
 ### 8.3 Chuyển nội dung từ `docs/README.md` của LITE sang file mới
 

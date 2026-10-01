@@ -22,6 +22,7 @@ docs/api/api.md
 docs/dev/testing.md
 docs/dev/configuration.md
 docs/dev/design-system.md
+docs/dev/frontend.md
 docs/dev/perf.md
 docs/security/threat-model.md
 docs/plan/roadmap.md

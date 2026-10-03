@@ -76,19 +76,21 @@ Mọi lỗi trả cùng một hình dạng; `code` là hằng số ổn định 
 
 | Method | Path | Mục đích | Xác thực | Spec | Trạng thái |
 |---|---|---|---|---|---|
-| `GET` | `/health` | *Ví dụ:* kiểm tra tiến trình còn sống | không | — | Đề xuất |
+| `GET` | `/health/live` | *Ví dụ:* tiến trình còn phục vụ được | không | — | Đề xuất |
+| `GET` | `/health/ready` | *Ví dụ:* bản này đã sẵn sàng nhận request | không | — | Đề xuất |
 | <…> | <…> | <…> | <…> | `NNN` | <…> |
 
 ## 4. Endpoint chi tiết
 
 <!-- Chỉ ghi điều OpenAPI không diễn tả được: tác dụng phụ, thứ tự kiểm tra, lỗi cụ thể, ví dụ đầy đủ. Mỗi endpoint một mục con. -->
 
-### 4.1 `GET /health`
+### 4.1 `GET /health/live` và `GET /health/ready`
 
-*Ví dụ.* Trả `200 {"status":"ok"}` khi tiến trình chạy và kết nối được cơ sở dữ liệu; trả `503` khi không. Không cần xác thực, không ghi log truy cập.
+*Ví dụ.* `/health/live` trả `200 {"status":"ok"}` khi process còn phục vụ được; không gọi DB/dịch vụ ngoài. `/health/ready` trả `200` khi các phụ thuộc bắt buộc đã sẵn sàng và `503` khi đang khởi động, đang dừng hoặc không thể phục vụ request. Không cần xác thực; có thể bỏ qua access log của probe thành công, nhưng vẫn ghi lỗi và giữ tín hiệu vận hành. Giới hạn thông tin công khai trong response.
 
 ```bash
-curl -fsS http://127.0.0.1:3000/health
+curl -fsS http://127.0.0.1:3000/health/live
+curl -fsS http://127.0.0.1:3000/health/ready
 ```
 
 ## 5. Kiểm thử hợp đồng
@@ -97,7 +99,7 @@ curl -fsS http://127.0.0.1:3000/health
 
 | # | Ca kiểm | Áp cho | Test |
 |---|---|---|---|
-| 1 | *Ví dụ:* mọi route cần xác thực trả 401 khi không có phiên | Mọi route trừ `/health` | <tên test> |
+| 1 | *Ví dụ:* mọi route cần xác thực trả 401 khi không có phiên | Mọi route trừ `/health/live` và `/health/ready` | <tên test> |
 
 ## 6. Câu hỏi mở
 

@@ -18,7 +18,7 @@ Bước phá huỷ (xoá, ghi đè, đổi symlink, restore) phải có dòng ki
 
 ```bash
 # Ví dụ: xác định đang ở tình huống này thật (thay bằng lệnh thật)
-curl -fsS http://127.0.0.1:3000/health; echo
+curl -fsS http://127.0.0.1:3000/health/ready; echo
 <lệnh xem trạng thái dịch vụ>
 <lệnh xem log gần nhất>
 ```

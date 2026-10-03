@@ -11,6 +11,7 @@
 #   4. check-links.py sạch trên kết quả (link chỉ trỏ tới file có trong hồ sơ);
 #   5. openapi.yaml (nếu có) là YAML hợp lệ, openapi 3.1 (cần PyYAML; thiếu thì bỏ qua bước này);
 #   6. chạy lại: 0 file chép, mọi file báo "bỏ qua", nội dung không đổi.
+#   7. STANDARD/FULL: chép mẫu NestJS tuỳ chọn rồi kiểm link trong hồ sơ thật.
 # Cuối cùng: check-links.py sạch trên chính bộ khuôn.
 set -euo pipefail
 
@@ -79,6 +80,11 @@ PY
   after="$(cd "$dir" && find . -type f -exec md5sum {} + | sort)"
   [ "$before" = "$after" ] || fail "$p: chạy lại đã đổi nội dung file"
   grep -q '^Tổng: 0 chép, '"$expected"' bỏ qua' "$work/$p.run2.log" || fail "$p: chạy lại không báo bỏ qua đủ $expected file"
+
+  if [ "$p" = standard ] || [ "$p" = full ]; then
+    cp "$KIT_DIR/template/docs/dev/backend-nestjs.md" "$dir/docs/dev/backend-nestjs.md"
+    python3 "$CHECK" --quiet "$dir" || fail "$p + NestJS: check-links báo lỗi"
+  fi
 
   printf '  %s file; %s\n' "$actual" "$(grep '^Tổng:' "$work/$p.run1.log")"
 done

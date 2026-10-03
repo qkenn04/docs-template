@@ -41,7 +41,7 @@ flowchart TD
 | `features/<tên>/` | Mọi thứ của một tính năng: gọi API, mapper, hook, component, page | Thứ mà feature khác cũng cần nhưng không có nghiệp vụ (đưa lên `shared/`) |
 | `shared/` | HTTP client, cấu hình môi trường, primitive giao diện, hook và hàm tiện ích không nghiệp vụ | Bất cứ thứ gì biết tên một thực thể nghiệp vụ (bài viết, đơn hàng, người dùng…) |
 
-Luật (vi phạm là lỗi review; L1–L3 kiểm tự động, mục 10):
+Luật (vi phạm là lỗi review; để gọi L1–L3 là kiểm tự động, cấu hình và lệnh CI phải đáp ứng mục 10):
 
 | # | Luật |
 |---|---|
@@ -183,27 +183,27 @@ Lỗi: lỗi API được chuẩn hoá ở `shared/api/`; mỗi page có trạng
 
 ## 10. Kiểm tra tự động
 
-<!-- Ghi công cụ thật và lệnh chạy. Ví dụ cấu hình ESLint; đổi đường dẫn cho khớp dự án. -->
+<!-- Ghi công cụ thật, file cấu hình và lệnh chạy. Kiểm cả import tương đối lẫn alias. -->
 
-| Luật | Công cụ | Lệnh |
+| Luật | Quy tắc cần cấu hình | File cấu hình và lệnh CI |
 |---|---|---|
-| L1 | <vd `import/no-restricted-paths` hoặc `eslint-plugin-boundaries`> | `<lệnh lint>` |
-| L2 | <vd `no-restricted-imports` với mẫu `@/features/*/*`> | `<lệnh lint>` |
-| L3 | <vd `import/no-cycle`> | `<lệnh lint>` |
+| L1 | Kiểm quan hệ `app`/`features`/`shared` theo đường dẫn đã resolve | `<file cấu hình>` · `<lệnh lint>` |
+| L2 | Xác định ranh giới từng `features/<tên>`; import từ feature khác chỉ tới `index.ts` của feature đích | `<file cấu hình>` · `<lệnh lint>` |
+| L3 | Phát hiện vòng phụ thuộc sau khi resolve import | `<file cấu hình>` · `<lệnh lint>` |
 
-*Ví dụ:*
+Có thể dùng quy tắc theo ranh giới file như `boundaries/dependencies` với policy file công khai `index.ts`, kết hợp kiểm vòng như `import/no-cycle`. Cấu hình resolver phải hiểu alias TypeScript và import tương đối; import nội bộ chưa phân loại hoặc không resolve được cũng phải làm CI báo lỗi. Quy tắc chỉ so chuỗi import như `no-restricted-imports` với mẫu `@/features/*/*` **không đủ** cho L2: nó bỏ lọt đường tương đối và có thể chặn nhầm import trong cùng feature.
 
-```js
-'import/no-cycle': 'error',
-'import/no-restricted-paths': ['error', { zones: [
-  { target: './src/shared', from: './src/features' },
-  { target: './src/shared', from: './src/app' },
-  { target: './src/features', from: './src/app' },
-]}],
-'no-restricted-imports': ['error', { patterns: [
-  { group: ['@/features/*/*'], message: 'Import qua features/<tên>/index.ts' },
-]}],
-```
+Trước khi đánh dấu cổng L1–L3 đã xong, chạy lint trên các tình huống sau; dùng tên feature thật của dự án và ghi lệnh ở bảng trên:
+
+| Import từ `src/features/a/api/a.ts` | Kết quả mong đợi | Luật |
+|---|---|---|
+| `../components/local` | Cho phép: cùng feature | L2 |
+| `@/features/a/components/local` | Cho phép: alias trong cùng feature | L2 |
+| `../../b/index` hoặc `@/features/b` | Cho phép: public API feature khác | L2 |
+| `../../b/components/internal` hoặc `@/features/b/components/internal` | Báo lỗi: import sâu feature khác | L2 |
+| `@/app/router` | Báo lỗi: feature import ngược lên app | L1 |
+
+Thêm một trường hợp `shared/` import `features/` và một cặp feature import vòng để kiểm L1, L3. Nếu cổng chưa có cấu hình, fixture và lệnh CI thật, ghi việc cần làm vào [kế hoạch](../plan/tasks.md), không đánh dấu đã kiểm tự động.
 
 ## 11. Khi nào không áp dụng
 

@@ -1,6 +1,6 @@
 # Chọn hồ sơ tài liệu
 
-> Trạng thái: Đang áp dụng · Cập nhật: 2026-10-01 · Liên quan: [README](README.md), [Khung tài liệu](README.md#1-khung-tài-liệu), [Bảng file theo hồ sơ](README.md#2-hồ-sơ), [Script dựng](scripts/new-project-docs.sh)
+> Trạng thái: Đang áp dụng · Cập nhật: 2026-10-03 · Liên quan: [README](README.md), [Khung tài liệu](README.md#1-khung-tài-liệu), [Bảng file theo hồ sơ](README.md#2-hồ-sơ), [Script dựng](scripts/new-project-docs.sh)
 
 Bộ tài liệu đầy đủ của bộ khuôn có 38 file, nhưng không dự án nào nên mang đủ 38 file ngay từ đầu. Một CLI nhỏ mà có `threat-model.md`, `runbooks/`, `specs/` và `design/` thì phần lớn là file rỗng: không ai điền, không ai đọc, và làm người mới khó thấy đâu là tài liệu thật. Ngược lại, một dịch vụ đang chạy thật mà thiếu runbook hay tài liệu cấu hình thì sẽ trả giá lúc có sự cố.
 
@@ -61,6 +61,8 @@ Tầng lấy theo [khung tài liệu](README.md#1-khung-tài-liệu): T1 bắt b
 | **Dự án điển hình** | Sản phẩm chính nhiều tính năng, có người dùng ngoài | Web app, API, bot đang chạy thật | Cấu hình máy chủ, CI dùng chung, giám sát | Tool nhỏ, thư viện, CLI, site tĩnh, prototype | Hệ thống đã quyết định ngừng |
 
 Bảng từng file theo hồ sơ: [README, mục 2](README.md#2-hồ-sơ). Nguồn sự thật là `profiles/<hồ-sơ>.txt`.
+
+**Dự án dùng NestJS:** sau khi dựng hồ sơ STANDARD hoặc FULL, chép thêm [mẫu cấu trúc NestJS](template/docs/dev/backend-nestjs.md) vào `docs/dev/backend-nestjs.md` và điền theo dự án ([lệnh chép](README.md#82-repo-có-sẵn-script)). Đây là mẫu theo công nghệ, độc lập với cỡ hồ sơ; các hồ sơ không tự thêm nó cho dự án dùng backend khác. Mẫu hướng dẫn tổ chức mã nguồn, không tạo mã NestJS.
 
 Mọi lệnh dưới đây chạy từ thư mục chứa bản clone `docs-template/`; thêm `--dry-run` để xem trước mà không ghi gì.
 

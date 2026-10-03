@@ -1,6 +1,6 @@
 # docs-template
 
-> Trạng thái: Đang áp dụng · Cập nhật: 2026-10-01 · Liên quan: [Chọn hồ sơ](PROFILES.md), [Mẫu docs/README](template/docs/README.md), [Hồ sơ FULL](profiles/full.txt), [Script dựng](scripts/new-project-docs.sh), [Kiểm link](scripts/check-links.py), [Mẫu PR](.github/pull_request_template.md)
+> Trạng thái: Đang áp dụng · Cập nhật: 2026-10-03 · Liên quan: [Chọn hồ sơ](PROFILES.md), [Mẫu docs/README](template/docs/README.md), [Hồ sơ FULL](profiles/full.txt), [Script dựng](scripts/new-project-docs.sh), [Kiểm link](scripts/check-links.py), [Mẫu PR](.github/pull_request_template.md)
 
 Bộ khuôn tài liệu phân tầng để dùng lại cho mọi dự án. Repo này **không** là tài liệu của một dự án nào. Nó gồm ba thứ:
 
@@ -46,6 +46,7 @@ Mục lục: [1. Khung tài liệu](#1-khung-tài-liệu) · [2. Hồ sơ](#2-h�
     ├── adr/                         T1   README (mục lục), 0000-template, 0001-record-architecture-decisions, NNNN-<name>
     ├── api/                         T2   openapi.yaml (OpenAPI 3.1), api.md
     ├── dev/                         T2   testing, configuration, design-system (khi có UI), frontend (khi có ứng dụng giao diện), perf (số đã đo)
+    │                                     backend-nestjs (mẫu tuỳ chọn khi dùng NestJS)
     ├── security/threat-model.md     T2/T3
     ├── plan/                        T2   roadmap, tasks, progress
     ├── specs/NNN-<name>/            T2   spec, plan, tasks (mẫu: 000-template/)
@@ -120,6 +121,8 @@ File mỗi hồ sơ tạo (nguồn sự thật: `profiles/<hồ-sơ>.txt`):
 
 `x` = file riêng từ `template/`. `biến thể` = file riêng lấy từ biến thể của hồ sơ (`template/README.retiring.md`, `template/AGENTS.retiring.md`, `template/docs/README.lite.md`, `template/docs/plan/roadmap.retiring.md`). `mục` = nội dung nằm thành một mục trong `docs/README.md` của hồ sơ đó, tách thành file khi đủ điều kiện ở mục 3.
 
+**Mẫu riêng cho NestJS:** [template/docs/dev/backend-nestjs.md](template/docs/dev/backend-nestjs.md) mô tả cây mã nguồn, ranh giới module, DTO/DB/CLI/job, validation, bảo mật HTTP, log, health/shutdown, preset thư viện cho backend mới và cổng kiểm trong CI. File này không nằm trong hồ sơ nào vì FULL và STANDARD cũng dùng được với backend không phải NestJS. Repo này chưa chứa starter mã nguồn hoặc thư viện NestJS đã cài. Cách thêm tài liệu sau khi dựng hồ sơ ở [mục 8.2](#82-repo-có-sẵn-script).
+
 RETIRING cố ý không đủ các ô T1: hệ thống sắp ngừng không nên nhận tài liệu mới. Ba file biến thể của nó chỉ link tới nhau; tài liệu dự án đã có (triển khai, runbook, cấu hình, ADR) được nhắc bằng đường dẫn dạng `code`, nên bộ 4 file không có link hỏng dù dự án có hay không có các file đó.
 
 **Đổi hồ sơ.** Script chỉ thêm file còn thiếu, nên chạy lại với hồ sơ lớn hơn (ví dụ `standard` rồi `full`) sẽ bổ sung các ô mới mà không đụng file đã có. LITE, PLATFORM, STANDARD, FULL lồng nhau theo thứ tự đó. Riêng `docs/README.md` không bị thay: khi lên từ LITE, chuyển các mục của nó sang file mới theo quy tắc tách file ([PROFILES.md, mục 8](PROFILES.md#8-lên-mức-khi-dự-án-lớn-dần)).
@@ -173,6 +176,7 @@ Một thay đổi chỉ xong khi tài liệu tương ứng đã sửa **trong c�
 | Ngân sách hoặc số đo hiệu năng | `product/nfr.md` (ngân sách), `dev/perf.md` (số đo) |
 | Giao diện, design token | `dev/design-system.md` |
 | Cấu trúc thư mục front-end, luật import giữa các tầng | `dev/frontend.md` |
+| Cấu trúc module NestJS, luật phụ thuộc giữa các feature | `dev/backend-nestjs.md` khi dùng NestJS |
 | Thuật ngữ mới | `product/glossary.md` |
 | Cách test, lệnh test | `dev/testing.md` |
 | Xong việc, đổi mốc | `plan/progress.md`, `plan/tasks.md`, `tasks.md` của spec |
@@ -218,6 +222,7 @@ Mỗi loại thông tin có đúng một nơi là nguồn sự thật; nơi khá
 ```bash
 tmp="$(mktemp -d)"
 scripts/new-project-docs.sh standard "$tmp" "Tên dự án"    # chọn hồ sơ theo PROFILES.md
+# Nếu dùng NestJS: cp template/docs/dev/backend-nestjs.md "$tmp/docs/dev/backend-nestjs.md"
 git rm -rq README.md PROFILES.md template profiles scripts/new-project-docs.sh scripts/test-profiles.sh
 cp -R "$tmp"/. . && rm -rf "${tmp:?}"
 python3 scripts/check-links.py .
@@ -226,7 +231,7 @@ git add -A && git commit -m "Add project docs from docs-template (standard profi
 
 Dùng `cp -R`, không dùng `cp -a`: `mktemp -d` tạo thư mục quyền 0700, và `cp -a` chép cả quyền đó lên thư mục gốc của repo. `cp -R` không đổi quyền thư mục đã có; file và thư mục mới theo umask (umask 022: file 0644, thư mục 0755, `check-links.py` giữ bit chạy).
 
-`scripts/check-links.py` và `.github/pull_request_template.md` được giữ (dự án dùng chúng; bản trong thư mục tạm chép đè lên với nội dung như cũ). Hồ sơ `retiring` không có hai file này: xoá chúng bằng `git rm` nếu không dùng. `LICENSE` của bộ khuôn còn lại: giữ nếu dự án cũng dùng MIT, sửa tên người giữ bản quyền hoặc thay giấy phép nếu không. Script từ chối dựng thẳng vào chính thư mục bộ khuôn, nên cần bước thư mục tạm ở trên.
+`scripts/check-links.py` và `.github/pull_request_template.md` được giữ (dự án dùng chúng; bản trong thư mục tạm chép đè lên với nội dung như cũ). Nếu chép mẫu NestJS, điền ngày metadata, phạm vi và ADR sau khi tạo repo. Hồ sơ `retiring` không có hai file này: xoá chúng bằng `git rm` nếu không dùng. `LICENSE` của bộ khuôn còn lại: giữ nếu dự án cũng dùng MIT, sửa tên người giữ bản quyền hoặc thay giấy phép nếu không. Script từ chối dựng thẳng vào chính thư mục bộ khuôn, nên cần bước thư mục tạm ở trên.
 
 ### 8.2 Repo có sẵn: script
 
@@ -236,6 +241,14 @@ docs-template/scripts/new-project-docs.sh <profile> <target-dir> ["Tên dự án
 ```
 
 File đã có ở đích **không bao giờ bị ghi đè**; script báo "bỏ qua" từng file. So file cũ với mẫu bằng `diff <file> docs-template/template/<file>` rồi chép tay phần muốn lấy. Repo đã có tài liệu ở chỗ khác: dựng vào thư mục tạm, rồi chuyển nội dung cũ vào đúng ô (dùng `git mv` để giữ lịch sử).
+
+Nếu dự án dùng NestJS, sau khi dựng hồ sơ STANDARD hoặc FULL, chép thêm mẫu theo công nghệ:
+
+```bash
+cp docs-template/template/docs/dev/backend-nestjs.md <target-dir>/docs/dev/backend-nestjs.md
+```
+
+Điền phạm vi, ADR, luật CI và ngày `Cập nhật`; thêm file vào bản đồ của `<target-dir>/docs/README.md`. Mẫu này là **tài liệu về cấu trúc**, không tạo thư mục hay mã NestJS. Không thêm file cho dự án không dùng NestJS.
 
 ### 8.3 Script làm gì
 
@@ -298,7 +311,7 @@ docs-template/
 │   ├── new-project-docs.sh       dựng bộ tài liệu theo hồ sơ
 │   ├── check-links.py            kiểm link và anchor; dự án dùng chung
 │   └── test-profiles.sh          tự kiểm bộ khuôn
-└── template/                     cây mẫu, đúng như cây của một dự án FULL
+└── template/                     cây mẫu FULL và mẫu riêng theo công nghệ
     ├── README.md, AGENTS.md, CLAUDE.md
     ├── README.retiring.md, AGENTS.retiring.md   biến thể (tên.<hồ-sơ>.đuôi, nằm cạnh file gốc)
     └── docs/ …                   (thêm README.lite.md, plan/roadmap.retiring.md)
@@ -306,7 +319,7 @@ docs-template/
 
 ### 10.2 Sửa hoặc thêm mẫu
 
-1. Sửa file trong `template/`. File mới: thêm đường dẫn vào các `profiles/*.txt` phù hợp, vào bảng ở mục 2 và vào danh sách file của hồ sơ trong [PROFILES.md](PROFILES.md).
+1. Sửa file trong `template/`. File chung mới: thêm đường dẫn vào các `profiles/*.txt` phù hợp, vào bảng ở mục 2 và vào danh sách file của hồ sơ trong [PROFILES.md](PROFILES.md). Mẫu riêng theo công nghệ (như `backend-nestjs.md`) ở ngoài các hồ sơ; ghi cách chép và điều kiện áp dụng ở README và PROFILES.
 2. **Link trong mẫu chỉ trỏ tới file có mặt ở mọi hồ sơ chứa file nguồn.** Ô có thể vắng ở một hồ sơ thì viết đường dẫn dạng `code`, không viết link. Ví dụ: `docs/README.md` (dùng cho FULL, STANDARD, PLATFORM) chỉ link tới file cả ba hồ sơ đều có; `api/`, `specs/`, `data-model.md` ghi dạng code.
 3. File mẫu để chép (`0000-template.md`, `000-template/`, `0000-rfc-template.md`) có dòng marker `<!-- check-links: template -->` riêng một dòng: `check-links.py` cho phép placeholder trong link của file đó. Marker còn sót trong file không mang tên "template" là lỗi, nhờ vậy file chép từ mẫu mà quên điền sẽ bị bắt.
 4. Chạy tự kiểm; mọi hồ sơ phải đạt:

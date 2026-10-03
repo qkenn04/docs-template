@@ -122,7 +122,7 @@ Ranh giới tin cậy và lớp bảo vệ chính; chi tiết ở [Mô hình đe
 └── scripts/          script tiện ích (kiểm link tài liệu, ...)
 ```
 
-Cấu trúc bên trong ứng dụng giao diện (tầng, feature, luật import) không chép vào đây mà nằm ở `dev/frontend.md` (nếu dự án có).
+Cấu trúc bên trong ứng dụng giao diện (tầng, feature, luật import) nằm ở `dev/frontend.md` (nếu dự án có). Với ứng dụng NestJS, cấu trúc module và luật phụ thuộc nằm ở `dev/backend-nestjs.md` khi dự án đã chép mẫu tuỳ chọn đó.
 
 ## 10. Công nghệ và phiên bản
 

@@ -27,7 +27,7 @@ Bộ tài liệu của <Tên dự án> theo khung phân tầng: mỗi thư mục
 | Hệ thống ra sao? | [architecture/ARCHITECTURE.md](architecture/ARCHITECTURE.md), [sơ đồ](architecture/diagrams/README.md) (T2); `architecture/data-model.md` (T2); `architecture/principles.md` (T3) | T1 |
 | Vì sao chọn vậy? | [adr/](adr/README.md): mỗi quyết định một file | T1 |
 | Giao tiếp thế nào? | `api/openapi.yaml`, `api/api.md` | T2 |
-| Code, test, cấu hình thế nào? | [dev/testing.md](dev/testing.md), [dev/configuration.md](dev/configuration.md); `dev/design-system.md` (khi có UI); `dev/frontend.md` (cấu trúc front-end, khi có ứng dụng giao diện); `dev/perf.md` (số đo thật) | T2 |
+| Code, test, cấu hình thế nào? | [dev/testing.md](dev/testing.md), [dev/configuration.md](dev/configuration.md); `dev/design-system.md` (khi có UI); `dev/frontend.md` (cấu trúc front-end, khi có ứng dụng giao diện); `dev/backend-nestjs.md` (mẫu tuỳ chọn khi dùng NestJS); `dev/perf.md` (số đo thật) | T2 |
 | Rủi ro bảo mật ở đâu? | [security/threat-model.md](security/threat-model.md) | T2/T3 |
 | Làm theo thứ tự nào, tới đâu rồi? | [plan/roadmap.md](plan/roadmap.md), [plan/tasks.md](plan/tasks.md), [plan/progress.md](plan/progress.md) | T2 |
 | Từng tính năng làm thế nào? | `specs/NNN-<name>/`: spec.md, plan.md, tasks.md | T2 |
@@ -90,6 +90,7 @@ Một thay đổi chỉ xong khi tài liệu tương ứng đã sửa **trong c�
 | Ngân sách hoặc số đo hiệu năng | [product/nfr.md](product/nfr.md) (ngân sách), `dev/perf.md` (số đo) |
 | Giao diện, design token | `dev/design-system.md` |
 | Cấu trúc thư mục front-end, luật import giữa các tầng | `dev/frontend.md` |
+| Cấu trúc module NestJS, luật phụ thuộc giữa các feature | `dev/backend-nestjs.md` khi dùng NestJS |
 | Thuật ngữ mới | [product/glossary.md](product/glossary.md) |
 | Cách test, lệnh test | [dev/testing.md](dev/testing.md) |
 | Xong việc, đổi mốc | [plan/progress.md](plan/progress.md), [plan/tasks.md](plan/tasks.md), `tasks.md` của spec |

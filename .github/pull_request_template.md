@@ -17,6 +17,7 @@
 - [ ] Ngân sách hoặc số đo hiệu năng → `docs/product/nfr.md`, `docs/dev/perf.md`
 - [ ] Giao diện hoặc design token → `docs/dev/design-system.md`
 - [ ] Thêm feature front-end, đổi tầng hoặc luật import → `docs/dev/frontend.md`
+- [ ] Đổi cấu trúc module NestJS hoặc luật phụ thuộc → `docs/dev/backend-nestjs.md` (nếu dự án dùng mẫu này)
 - [ ] Thuật ngữ mới → `docs/product/glossary.md`
 - [ ] Cách test hoặc lệnh test → `docs/dev/testing.md`
 - [ ] Xong việc hoặc đổi mốc → `docs/plan/progress.md`, `docs/plan/tasks.md`, `tasks.md` của spec

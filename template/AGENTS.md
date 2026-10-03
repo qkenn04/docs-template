@@ -34,10 +34,11 @@ Bản đồ đầy đủ: [docs/README.md](docs/README.md). Tra nhanh:
 | Hệ thống gồm gì, chạy thế nào | `docs/architecture/ARCHITECTURE.md` |
 | Vì sao chọn công nghệ hay cách làm này | `docs/adr/` (đừng đề xuất lại phương án một ADR đã bác, trừ khi có lý do mới) |
 | Lệnh test, cấu hình, biến môi trường | `docs/dev/testing.md`, `docs/dev/configuration.md` |
+| Cấu trúc ứng dụng | `docs/dev/frontend.md` khi có ứng dụng giao diện; `docs/dev/backend-nestjs.md` khi dùng NestJS |
 | Đang làm gì, tới đâu | `docs/plan/progress.md`, `docs/plan/tasks.md` |
 | Deploy, rollback, sự cố | `docs/ops/deployment.md`, `docs/ops/runbooks/` |
 
-File nào chưa có ở dự án này thì nội dung tương ứng nằm trong một mục của `docs/README.md`.
+File chung nào chưa có ở dự án này thì nội dung tương ứng nằm trong một mục của `docs/README.md`. Mẫu `docs/dev/backend-nestjs.md` chỉ thêm khi dự án dùng NestJS; nếu chưa có, xem cách chép ở README của bộ khuôn.
 
 ## Cách làm việc
 

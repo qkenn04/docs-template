@@ -2,7 +2,7 @@
 # Dựng bộ tài liệu theo một hồ sơ (profile) của docs-template vào một thư mục dự án.
 #
 # Dùng:
-#   scripts/new-project-docs.sh [--dry-run] <profile> <target-dir> [project-name]
+#   scripts/new-project-docs.sh [--dry-run] [--topic <topic>] <profile> <target-dir> [project-name]
 #
 #   profile       minimal | full | standard | platform | lite | retiring (tên file trong profiles/)
 #   target-dir    thư mục dự án (repo mới hoặc repo có sẵn); tạo nếu chưa có
@@ -10,6 +10,7 @@
 #
 # Script chỉ THÊM file: file đã có ở đích luôn được giữ nguyên và được báo "bỏ qua".
 # Chạy lại với hồ sơ lớn hơn để bổ sung các ô còn thiếu.
+# Topic là gói chọn thêm trong topics/<topic>/files.txt; có thể dùng --topic nhiều lần.
 #
 # Nguồn của mỗi đường dẫn P trong hồ sơ (theo thứ tự):
 #   1. template/<thư mục của P>/<tên>.<profile>.<đuôi>   (biến thể riêng của hồ sơ)
@@ -29,7 +30,7 @@ DATE_PLACEHOLDER='<Ngày tạo>'
 
 usage() {
   cat <<EOF
-Dùng: $(basename "$0") [--dry-run] <profile> <target-dir> [project-name]
+Dùng: $(basename "$0") [--dry-run] [--topic <topic> ...] <profile> <target-dir> [project-name]
 
 Hồ sơ có sẵn:
 EOF
@@ -41,6 +42,7 @@ EOF
 
 Ví dụ:
   $(basename "$0") standard ../my-app "My App"
+  $(basename "$0") --topic backend/nestjs --topic ci-cd/github-actions standard ../my-app "My App"
   $(basename "$0") --dry-run lite .
 EOF
 }
@@ -53,14 +55,22 @@ abs_path() {
 }
 
 dry_run=0
+topics=()
 args=()
-for a in "$@"; do
+while [ "$#" -gt 0 ]; do
+  a="$1"
   case "$a" in
     --dry-run|-n) dry_run=1 ;;
+    --topic)
+      [ "$#" -gt 1 ] || die "thiếu tên sau --topic"
+      topics+=("$2")
+      shift ;;
+    --topic=*) topics+=("${a#--topic=}") ;;
     -h|--help) usage; exit 0 ;;
     -*) usage >&2; die "không hiểu tuỳ chọn: $a" ;;
     *) args+=("$a") ;;
   esac
+  shift
 done
 [ "${#args[@]}" -ge 2 ] && [ "${#args[@]}" -le 3 ] || { usage >&2; exit 2; }
 
@@ -71,6 +81,13 @@ profile_file="$KIT_DIR/profiles/$profile.txt"
 [ -f "$profile_file" ] || die "không có hồ sơ '$profile' (xem profiles/)"
 [ -n "$target" ] || die "target-dir rỗng"
 case "$project_name" in *$'\n'*) die "project-name không được chứa xuống dòng" ;; esac
+for topic in "${topics[@]}"; do
+  [[ "$topic" =~ ^[a-z0-9-]+/[a-z0-9-]+$ ]] || die "tên topic không hợp lệ: '$topic'"
+  [ -f "$KIT_DIR/topics/$topic/files.txt" ] || die "không có topic '$topic' (xem topics/README.md)"
+  if { [ "$topic" = frontend/react ] || [ "$topic" = backend/nestjs ]; } && [ "$profile" != standard ] && [ "$profile" != full ]; then
+    die "topic '$topic' cần hồ sơ standard hoặc full vì liên kết tới các tài liệu chung của hồ sơ đó"
+  fi
+done
 
 # Không cho dựng vào chính bộ khuôn (tránh làm bẩn template/).
 target_abs="$(abs_path "$target")"
@@ -106,6 +123,8 @@ while IFS= read -r line || [ -n "$line" ]; do
     src="$variant_path"
   elif [ -f "$KIT_DIR/template/$line" ]; then
     src="$KIT_DIR/template/$line"
+  elif [ "$profile" = full ] && [ "$line" = docs/dev/frontend.md ]; then
+    src="$KIT_DIR/topics/frontend/react/files/$line"
   elif [ -f "$KIT_DIR/$line" ]; then
     src="$KIT_DIR/$line"
   else
@@ -115,6 +134,28 @@ while IFS= read -r line || [ -n "$line" ]; do
   sources+=("$src")
 done < "$profile_file"
 [ "${#paths[@]}" -gt 0 ] || die "hồ sơ $profile rỗng"
+
+# Topic dùng cùng đường dẫn ở project đích. Kiểm hết nguồn trước khi ghi file.
+for topic in "${topics[@]}"; do
+  while IFS= read -r line || [ -n "$line" ]; do
+    line="${line%%#*}"
+    line="$(printf '%s' "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+    [ -n "$line" ] || continue
+    case "$line" in
+      /*|../*|*/../*|*/..|..) die "$topic/files.txt: đường dẫn không hợp lệ: $line" ;;
+    esac
+    src="$KIT_DIR/topics/$topic/files/$line"
+    [ -f "$src" ] || die "$topic/files.txt: không tìm thấy nguồn cho $line"
+    # FULL đã gồm frontend; một topic lặp lại không được chép hai lần.
+    duplicate=0
+    for existing in "${paths[@]}"; do
+      [ "$existing" = "$line" ] && duplicate=1 && break
+    done
+    [ "$duplicate" -eq 1 ] && continue
+    paths+=("$line")
+    sources+=("$src")
+  done < "$KIT_DIR/topics/$topic/files.txt"
+done
 
 # Chép một file văn bản, thay tên dự án và ngày ở dòng metadata đầu file.
 render() {
@@ -145,6 +186,7 @@ skipped=0
 [ "$dry_run" -eq 1 ] && printf '(chạy thử: không ghi gì)\n'
 printf 'Hồ sơ: %s · Đích: %s · Tên dự án: %s · Ngày: %s\n' \
   "$profile" "$target_abs" "${project_name:-(giữ $PLACEHOLDER)}" "$today"
+[ "${#topics[@]}" -eq 0 ] || printf 'Topic: %s\n' "${topics[*]}"
 
 for i in "${!paths[@]}"; do
   rel="${paths[$i]}"
@@ -178,7 +220,7 @@ else
   printf 'Tổng: %d chép, %d bỏ qua (đã có)\n' "$copied" "$skipped"
 fi
 if [ "$skipped" -gt 0 ]; then
-  printf 'File đã có được giữ nguyên. So với mẫu nếu cần: diff <file> %s/template/<file>\n' "$KIT_DIR"
+  printf 'File đã có được giữ nguyên. Xem đường dẫn nguồn ở các dòng "chép" khi cần so sánh.\n'
 fi
 checker="$target_abs/scripts/check-links.py"
 [ -f "$checker" ] || checker="$KIT_DIR/scripts/check-links.py"

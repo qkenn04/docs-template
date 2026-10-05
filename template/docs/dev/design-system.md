@@ -1,6 +1,6 @@
 # Hệ thống thiết kế
 
-> Trạng thái: Nháp · Cập nhật: YYYY-MM-DD · Liên quan: [Yêu cầu phi chức năng](../product/nfr.md), [Kiến trúc](../architecture/ARCHITECTURE.md), [Cấu trúc front-end](frontend.md), [Kiểm thử](testing.md)
+> Trạng thái: Nháp · Cập nhật: YYYY-MM-DD · Liên quan: [Yêu cầu phi chức năng](../product/nfr.md), [Kiến trúc](../architecture/ARCHITECTURE.md), cấu trúc front-end `frontend.md` (khi dùng topic React), [Kiểm thử](testing.md)
 
 <!--
 Chỉ cần khi dự án có giao diện người dùng.

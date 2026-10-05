@@ -11,7 +11,7 @@
 #   4. check-links.py sạch trên kết quả (link chỉ trỏ tới file có trong hồ sơ);
 #   5. openapi.yaml (nếu có) là YAML hợp lệ, openapi 3.1 (cần PyYAML; thiếu thì bỏ qua bước này);
 #   6. chạy lại: 0 file chép, mọi file báo "bỏ qua", nội dung không đổi.
-#   7. STANDARD/FULL: chép mẫu NestJS tuỳ chọn rồi kiểm link trong hồ sơ thật.
+#   7. STANDARD/FULL: thêm các topic theo nhu cầu rồi kiểm link trong kết quả thật.
 # Cuối cùng: check-links.py sạch trên chính bộ khuôn.
 set -euo pipefail
 
@@ -82,12 +82,34 @@ PY
   grep -q '^Tổng: 0 chép, '"$expected"' bỏ qua' "$work/$p.run2.log" || fail "$p: chạy lại không báo bỏ qua đủ $expected file"
 
   if [ "$p" = standard ] || [ "$p" = full ]; then
-    cp "$KIT_DIR/template/docs/dev/backend-nestjs.md" "$dir/docs/dev/backend-nestjs.md"
-    python3 "$CHECK" --quiet "$dir" || fail "$p + NestJS: check-links báo lỗi"
+    "$SCAFFOLD" --topic backend/nestjs --topic ci-cd/github-actions "$p" "$dir" "$NAME" > "$work/$p.topics.log"
+    [ -f "$dir/docs/dev/backend-nestjs.md" ] || fail "$p: thiếu topic NestJS"
+    [ -f "$dir/docs/ops/ci-cd.md" ] || fail "$p: thiếu topic CI/CD"
+    python3 "$CHECK" --quiet "$dir" || fail "$p + topics: check-links báo lỗi"
+  fi
+  if [ "$p" = full ]; then
+    "$SCAFFOLD" --topic frontend/react "$p" "$dir" "$NAME" > "$work/$p.frontend.log"
+    [ "$(find "$dir" -type f | wc -l | tr -d ' ')" = "$((expected + 2))" ] || fail "full + frontend: file trùng"
+  fi
+  if [ "$p" = standard ]; then
+    "$SCAFFOLD" --topic frontend/react "$p" "$dir" "$NAME" > "$work/$p.frontend.log"
+    python3 "$CHECK" --quiet "$dir" || fail "standard + frontend: check-links báo lỗi"
   fi
 
   printf '  %s file; %s\n' "$actual" "$(grep '^Tổng:' "$work/$p.run1.log")"
 done
+
+printf '== topic độc lập\n'
+topic_dir="$work/topics"
+"$SCAFFOLD" --topic ci-cd/github-actions minimal "$topic_dir" "$NAME" > "$work/topics.log"
+[ -f "$topic_dir/docs/ops/ci-cd.md" ] || fail "minimal + CI/CD: thiếu file"
+python3 "$CHECK" --quiet "$topic_dir" || fail "minimal + CI/CD: check-links báo lỗi"
+"$SCAFFOLD" --dry-run --topic backend/nestjs standard "$work/dry-topic" "$NAME" > "$work/dry-topic.log"
+[ ! -e "$work/dry-topic" ] || fail "topic: --dry-run đã tạo thư mục"
+if "$SCAFFOLD" --topic backend/nestjs minimal "$work/invalid-topic" "$NAME" > "$work/invalid-topic.log" 2>&1; then
+  fail "minimal + NestJS: cần từ chối vì thiếu tài liệu chung"
+fi
+[ ! -e "$work/invalid-topic" ] || fail "topic không hợp lệ đã tạo thư mục"
 
 printf '== bộ khuôn\n'
 python3 "$CHECK" "$KIT_DIR" || fail "check-links báo lỗi trên bộ khuôn"

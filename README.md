@@ -1,12 +1,13 @@
 # docs-template
 
-> Trạng thái: Đang áp dụng · Cập nhật: 2026-10-03 · Liên quan: [Chọn hồ sơ](PROFILES.md), [Mẫu docs/README](template/docs/README.md), [Hồ sơ FULL](profiles/full.txt), [Script dựng](scripts/new-project-docs.sh), [Kiểm link](scripts/check-links.py), [Mẫu PR](.github/pull_request_template.md)
+> Trạng thái: Đang áp dụng · Cập nhật: 2026-10-05 · Liên quan: [Chọn hồ sơ](PROFILES.md), [Topic](topics/README.md), [Mẫu docs/README](template/docs/README.md), [Script dựng](scripts/new-project-docs.sh), [Kiểm link](scripts/check-links.py)
 
 Bộ khuôn tài liệu phân tầng để dùng lại cho mọi dự án. Repo này **không** là tài liệu của một dự án nào. Nó gồm ba thứ:
 
 - **Mẫu** cho từng ô của khung tài liệu (`template/`): mỗi file có sẵn các mục, comment hướng dẫn bằng tiếng Việt, placeholder và ví dụ được đánh dấu là ví dụ.
 - **Hồ sơ** (`profiles/`): mỗi loại dự án cần những ô nào. Chọn hồ sơ nào: [PROFILES.md](PROFILES.md).
 - **Script** (`scripts/`): dựng bộ tài liệu theo hồ sơ vào một repo mới hoặc có sẵn, và kiểm link.
+- **Topic** (`topics/`): mẫu chọn thêm theo công nghệ hoặc công việc, như React, NestJS và CI/CD.
 
 Bộ khuôn dùng được ngay; nó không có bước "hoàn tất tài liệu". Việc điền nội dung thuộc về từng dự án, sau khi dựng.
 
@@ -21,6 +22,8 @@ docs-template/scripts/new-project-docs.sh minimal ../my-app "My App"
 ```
 
 Muốn bộ tài liệu phân tầng đầy đủ hơn thì chọn một hồ sơ trong [PROFILES.md](PROFILES.md); lệnh giống trên, thay `minimal` bằng tên hồ sơ.
+
+Muốn thêm một chủ đề cụ thể thì dùng `--topic`; ví dụ: `--topic backend/nestjs --topic ci-cd/github-actions`. Xem [danh sách topic](topics/README.md). Có thể chạy lại trên project đã có: script chỉ thêm file còn thiếu.
 
 Mục lục: [1. Khung tài liệu](#1-khung-tài-liệu) · [2. Hồ sơ](#2-hồ-sơ) · [3. Quy tắc tách file](#3-quy-tắc-tách-file) · [4. Quy ước](#4-quy-ước) · [5. Definition of Done cho tài liệu](#5-definition-of-done-cho-tài-liệu) · [6. Quy tắc ADR](#6-quy-tắc-adr) · [7. Spec, lộ trình, việc, tiến độ](#7-spec-lộ-trình-việc-tiến-độ) · [8. Cách dùng](#8-cách-dùng) · [9. Giữ tài liệu sống](#9-giữ-tài-liệu-sống) · [10. Bảo trì bộ khuôn](#10-bảo-trì-bộ-khuôn)
 
@@ -120,9 +123,9 @@ File mỗi hồ sơ tạo (nguồn sự thật: `profiles/<hồ-sơ>.txt`):
 | `docs/ops/postmortems/000-template.md` | T1\* | x | x | x | | |
 | **Số file** | | 38 | 32 | 25 | 8 | 4 |
 
-`x` = file riêng từ `template/`. `biến thể` = file riêng lấy từ biến thể của hồ sơ (`template/README.retiring.md`, `template/AGENTS.retiring.md`, `template/docs/README.lite.md`, `template/docs/plan/roadmap.retiring.md`). `mục` = nội dung nằm thành một mục trong `docs/README.md` của hồ sơ đó, tách thành file khi đủ điều kiện ở mục 3.
+`x` = file riêng từ `template/`, trừ `docs/dev/frontend.md` của FULL lấy từ [topic React](topics/frontend/react/README.md). `biến thể` = file riêng lấy từ biến thể của hồ sơ (`template/README.retiring.md`, `template/AGENTS.retiring.md`, `template/docs/README.lite.md`, `template/docs/plan/roadmap.retiring.md`). `mục` = nội dung nằm thành một mục trong `docs/README.md` của hồ sơ đó, tách thành file khi đủ điều kiện ở mục 3.
 
-**Mẫu riêng cho NestJS:** [template/docs/dev/backend-nestjs.md](template/docs/dev/backend-nestjs.md) mô tả cây mã nguồn, ranh giới module, DTO/DB/CLI/job, validation, bảo mật HTTP, log, health/shutdown, preset thư viện cho backend mới và cổng kiểm trong CI. File này không nằm trong hồ sơ nào vì FULL và STANDARD cũng dùng được với backend không phải NestJS. Repo này chưa chứa starter mã nguồn hoặc thư viện NestJS đã cài. Cách thêm tài liệu sau khi dựng hồ sơ ở [mục 8.2](#82-repo-có-sẵn-script).
+**Mẫu riêng cho NestJS:** [topic backend/nestjs](topics/backend/nestjs/README.md) mô tả cây mã nguồn, ranh giới module, DTO/DB/CLI/job, validation, bảo mật HTTP, log và health/shutdown. File này không nằm trong hồ sơ nào vì FULL và STANDARD cũng dùng được với backend không phải NestJS. Cách thêm ở [mục 8.2](#82-repo-có-sẵn-script).
 
 RETIRING cố ý không đủ các ô T1: hệ thống sắp ngừng không nên nhận tài liệu mới. Ba file biến thể của nó chỉ link tới nhau; tài liệu dự án đã có (triển khai, runbook, cấu hình, ADR) được nhắc bằng đường dẫn dạng `code`, nên bộ 4 file không có link hỏng dù dự án có hay không có các file đó.
 
@@ -222,9 +225,8 @@ Mỗi loại thông tin có đúng một nơi là nguồn sự thật; nơi khá
 
 ```bash
 tmp="$(mktemp -d)"
-scripts/new-project-docs.sh standard "$tmp" "Tên dự án"    # chọn hồ sơ theo PROFILES.md
-# Nếu dùng NestJS: cp template/docs/dev/backend-nestjs.md "$tmp/docs/dev/backend-nestjs.md"
-git rm -rq README.md PROFILES.md template profiles scripts/new-project-docs.sh scripts/test-profiles.sh
+scripts/new-project-docs.sh --topic backend/nestjs standard "$tmp" "Tên dự án"    # bỏ --topic nếu không dùng NestJS
+git rm -rq README.md PROFILES.md template topics profiles scripts/new-project-docs.sh scripts/test-profiles.sh
 cp -R "$tmp"/. . && rm -rf "${tmp:?}"
 python3 scripts/check-links.py .
 git add -A && git commit -m "Add project docs from docs-template (standard profile)"
@@ -232,24 +234,24 @@ git add -A && git commit -m "Add project docs from docs-template (standard profi
 
 Dùng `cp -R`, không dùng `cp -a`: `mktemp -d` tạo thư mục quyền 0700, và `cp -a` chép cả quyền đó lên thư mục gốc của repo. `cp -R` không đổi quyền thư mục đã có; file và thư mục mới theo umask (umask 022: file 0644, thư mục 0755, `check-links.py` giữ bit chạy).
 
-`scripts/check-links.py` và `.github/pull_request_template.md` được giữ (dự án dùng chúng; bản trong thư mục tạm chép đè lên với nội dung như cũ). Nếu chép mẫu NestJS, điền ngày metadata, phạm vi và ADR sau khi tạo repo. Hồ sơ `retiring` không có hai file này: xoá chúng bằng `git rm` nếu không dùng. `LICENSE` của bộ khuôn còn lại: giữ nếu dự án cũng dùng MIT, sửa tên người giữ bản quyền hoặc thay giấy phép nếu không. Script từ chối dựng thẳng vào chính thư mục bộ khuôn, nên cần bước thư mục tạm ở trên.
+`scripts/check-links.py` và `.github/pull_request_template.md` được giữ (dự án dùng chúng; bản trong thư mục tạm chép đè lên với nội dung như cũ). Nếu thêm topic NestJS, điền phạm vi và ADR sau khi tạo repo. Hồ sơ `retiring` không có hai file này: xoá chúng bằng `git rm` nếu không dùng. `LICENSE` của bộ khuôn còn lại: giữ nếu dự án cũng dùng MIT, sửa tên người giữ bản quyền hoặc thay giấy phép nếu không. Script từ chối dựng thẳng vào chính thư mục bộ khuôn, nên cần bước thư mục tạm ở trên.
 
 ### 8.2 Repo có sẵn: script
 
 ```bash
-docs-template/scripts/new-project-docs.sh --dry-run <profile> <target-dir> ["Tên dự án"]   # xem trước
-docs-template/scripts/new-project-docs.sh <profile> <target-dir> ["Tên dự án"]
+docs-template/scripts/new-project-docs.sh --dry-run [--topic backend/nestjs] <profile> <target-dir> ["Tên dự án"]
+docs-template/scripts/new-project-docs.sh [--topic backend/nestjs] <profile> <target-dir> ["Tên dự án"]
 ```
 
-File đã có ở đích **không bao giờ bị ghi đè**; script báo "bỏ qua" từng file. So file cũ với mẫu bằng `diff <file> docs-template/template/<file>` rồi chép tay phần muốn lấy. Repo đã có tài liệu ở chỗ khác: dựng vào thư mục tạm, rồi chuyển nội dung cũ vào đúng ô (dùng `git mv` để giữ lịch sử).
+File đã có ở đích **không bao giờ bị ghi đè**; script báo "bỏ qua" từng file. Repo đã có tài liệu ở chỗ khác: dựng vào thư mục tạm, rồi chuyển nội dung cũ vào đúng ô (dùng `git mv` để giữ lịch sử).
 
-Nếu dự án dùng NestJS, sau khi dựng hồ sơ STANDARD hoặc FULL, chép thêm mẫu theo công nghệ:
+Nếu dự án dùng NestJS, thêm topic theo công nghệ (có thể thêm nhiều `--topic`):
 
 ```bash
-cp docs-template/template/docs/dev/backend-nestjs.md <target-dir>/docs/dev/backend-nestjs.md
+docs-template/scripts/new-project-docs.sh --topic backend/nestjs standard <target-dir> "Tên dự án"
 ```
 
-Điền phạm vi, ADR, luật CI và ngày `Cập nhật`; thêm file vào bản đồ của `<target-dir>/docs/README.md`. Mẫu này là **tài liệu về cấu trúc**, không tạo thư mục hay mã NestJS. Không thêm file cho dự án không dùng NestJS.
+Điền phạm vi, ADR và luật CI; thêm file vào bản đồ của `<target-dir>/docs/README.md`. Mẫu này là **tài liệu về cấu trúc**, không tạo thư mục hay mã NestJS. Không thêm file cho dự án không dùng NestJS.
 
 ### 8.3 Script làm gì
 

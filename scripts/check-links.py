@@ -11,6 +11,7 @@ Kiểm gì:
     hoặc một <a name|id="...">. "#anchor" đơn lẻ được kiểm trong chính file đó.
   - Bỏ qua: link ngoài (http:, https:, mailto:, ...), khối code (``` và ~~~), code trong dòng,
     comment HTML.
+  - File trong topics/<nhóm>/<tên>/files/ được kiểm như khi chép vào template/.
 
 Đánh dấu (comment HTML đứng riêng một dòng):
   <!-- check-links: template -->   File là mẫu để chép: cho phép đích có placeholder
@@ -147,6 +148,13 @@ class Repo:
     def rel(self, path):
         return os.path.relpath(path, self.root).replace(os.sep, "/")
 
+    def link_base(self, path):
+        """Topic payloads giữ đường dẫn tương đối như khi được chép vào template/docs/."""
+        parts = self.rel(path).split("/")
+        if len(parts) > 4 and parts[0] == "topics" and parts[3] == "files":
+            return os.path.join(self.root, "template", *parts[4:])
+        return path
+
     def excluded(self, rel):
         return any(fnmatch.fnmatch(rel, g) or fnmatch.fnmatch(rel + "/", g) for g in self.excludes)
 
@@ -227,6 +235,8 @@ def check_file(repo, path, problems):
                 dest = os.path.normpath(os.path.join(repo.root, path_part.lstrip("/")))
             else:
                 dest = os.path.normpath(os.path.join(os.path.dirname(path), path_part))
+                if not os.path.exists(dest) and repo.link_base(path) != path:
+                    dest = os.path.normpath(os.path.join(os.path.dirname(repo.link_base(path)), path_part))
             if not os.path.exists(dest):
                 problems.append(f"{where}: không có file {target}")
                 continue

@@ -1,6 +1,6 @@
 # Cấu trúc front-end
 
-> Trạng thái: Nháp · Cập nhật: YYYY-MM-DD · Liên quan: [Kiến trúc](../architecture/ARCHITECTURE.md), [Hệ thống thiết kế](design-system.md), [Kiểm thử](testing.md), [Cấu hình](configuration.md), [Quy ước API](../api/api.md), [Mục lục ADR](../adr/README.md)
+> Trạng thái: Nháp · Cập nhật: YYYY-MM-DD · Liên quan: [Kiến trúc](../architecture/ARCHITECTURE.md), hệ thống thiết kế `design-system.md` (nếu có), [Kiểm thử](testing.md), [Cấu hình](configuration.md), [Quy ước API](../api/api.md), [Mục lục ADR](../adr/README.md)
 
 <!--
 Chỉ cần khi dự án có ứng dụng giao diện có state (trang quản trị, SPA, app có form và gọi API).
@@ -145,7 +145,7 @@ export { OrdersPage } from './pages/orders-page'
 |---|---|---|
 | `api/` | HTTP client: gắn header xác thực hoặc CSRF, gửi cookie, chuẩn hoá lỗi theo [Quy ước API](../api/api.md), kiểm schema; cấu hình client dữ liệu (retry, thời gian cache) | Endpoint cụ thể |
 | `config/` | Biến môi trường của front-end, kiểm schema lúc khởi động (sai thì app không chạy, xem [Cấu hình](configuration.md)); hàm tạo đường dẫn route; hằng số toàn app | Bí mật (front-end không giữ bí mật) |
-| `components/` | Primitive giao diện theo [Hệ thống thiết kế](design-system.md), khung trang | Component biết nghiệp vụ |
+| `components/` | Primitive giao diện theo `design-system.md` (nếu có), khung trang | Component biết nghiệp vụ |
 | `hooks/` | Hook không nghiệp vụ | Hook gọi API của một thực thể |
 | `utils/` | Hàm thuần không nghiệp vụ | Hàm đã có trong package dùng chung của repo (định dạng ngày, slug…): import, không viết lại |
 

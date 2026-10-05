@@ -4,7 +4,7 @@
 # Dùng:
 #   scripts/new-project-docs.sh [--dry-run] <profile> <target-dir> [project-name]
 #
-#   profile       full | standard | platform | lite | retiring (tên file trong profiles/)
+#   profile       minimal | full | standard | platform | lite | retiring (tên file trong profiles/)
 #   target-dir    thư mục dự án (repo mới hoặc repo có sẵn); tạo nếu chưa có
 #   project-name  thay cho "<Tên dự án>" trong mọi file chép sang; bỏ trống thì giữ placeholder
 #
@@ -182,7 +182,11 @@ if [ "$skipped" -gt 0 ]; then
 fi
 checker="$target_abs/scripts/check-links.py"
 [ -f "$checker" ] || checker="$KIT_DIR/scripts/check-links.py"
-if [ "$dry_run" -eq 0 ] && [ "$profile" = retiring ]; then
+if [ "$dry_run" -eq 0 ] && [ "$profile" = minimal ]; then
+  cat <<EOF
+Tiếp theo: điền README.md bằng lệnh và thông tin thật của dự án; xoá mục chưa cần.
+EOF
+elif [ "$dry_run" -eq 0 ] && [ "$profile" = retiring ]; then
   cat <<EOF
 Tiếp theo (hồ sơ retiring: không thêm tài liệu mới):
   1. Điền banner đầu README.md (ngày ngừng hẳn, hệ thống thay thế) và kế hoạch ngừng docs/plan/roadmap.md.

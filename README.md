@@ -12,14 +12,15 @@ Bộ khuôn dùng được ngay; nó không có bước "hoàn tất tài liệu
 
 ## Bắt đầu nhanh
 
-**Chọn hồ sơ trước:** [PROFILES.md](PROFILES.md) giải thích 5 hồ sơ (FULL, STANDARD, PLATFORM, LITE, RETIRING): dùng khi nào, tạo file gì, bỏ gì, sơ đồ chọn nhanh và cách lên mức khi dự án lớn dần.
+**Muốn bắt đầu tối gọn:** `minimal` chỉ tạo một `README.md` với mục đích, lệnh chạy, cấu hình, kiểm tra và ghi chú bảo trì. Các mục chưa áp dụng có thể xoá. [PROFILES.md](PROFILES.md) giải thích thêm 5 hồ sơ phân tầng (FULL, STANDARD, PLATFORM, LITE, RETIRING).
 
 ```bash
 git clone <url-của-repo-này> docs-template
-docs-template/scripts/new-project-docs.sh --dry-run standard ../my-app "My App"   # xem trước, không ghi gì
-docs-template/scripts/new-project-docs.sh standard ../my-app "My App"
-python3 ../my-app/scripts/check-links.py ../my-app
+docs-template/scripts/new-project-docs.sh --dry-run minimal ../my-app "My App"
+docs-template/scripts/new-project-docs.sh minimal ../my-app "My App"
 ```
+
+Muốn bộ tài liệu phân tầng đầy đủ hơn thì chọn một hồ sơ trong [PROFILES.md](PROFILES.md); lệnh giống trên, thay `minimal` bằng tên hồ sơ.
 
 Mục lục: [1. Khung tài liệu](#1-khung-tài-liệu) · [2. Hồ sơ](#2-hồ-sơ) · [3. Quy tắc tách file](#3-quy-tắc-tách-file) · [4. Quy ước](#4-quy-ước) · [5. Definition of Done cho tài liệu](#5-definition-of-done-cho-tài-liệu) · [6. Quy tắc ADR](#6-quy-tắc-adr) · [7. Spec, lộ trình, việc, tiến độ](#7-spec-lộ-trình-việc-tiến-độ) · [8. Cách dùng](#8-cách-dùng) · [9. Giữ tài liệu sống](#9-giữ-tài-liệu-sống) · [10. Bảo trì bộ khuôn](#10-bảo-trì-bộ-khuôn)
 

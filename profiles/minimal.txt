@@ -1,0 +1,3 @@
+# Hồ sơ MINIMAL
+# Mô tả: một README duy nhất cho project nhỏ hoặc tài liệu mới bắt đầu
+README.md

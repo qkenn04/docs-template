@@ -4,6 +4,8 @@
 
 Bộ tài liệu đầy đủ của bộ khuôn có 38 file, nhưng không dự án nào nên mang đủ 38 file ngay từ đầu. Một CLI nhỏ mà có `threat-model.md`, `runbooks/`, `specs/` và `design/` thì phần lớn là file rỗng: không ai điền, không ai đọc, và làm người mới khó thấy đâu là tài liệu thật. Ngược lại, một dịch vụ đang chạy thật mà thiếu runbook hay tài liệu cấu hình thì sẽ trả giá lúc có sự cố.
 
+**Nếu 8 file của LITE vẫn quá nhiều:** dùng [`minimal`](profiles/minimal.txt). Hồ sơ này chỉ thêm một `README.md` ngắn, không có `docs/`, ADR, AGENTS, mẫu PR hay script kiểm link. Nó là điểm khởi đầu thực dụng nằm ngoài bảng phân tầng bên dưới. Khi cần thêm tài liệu, chạy hồ sơ khác; script giữ README hiện có, nên hãy bổ sung link tới file mới theo nhu cầu.
+
 **Hồ sơ** giải quyết chuyện đó: mỗi hồ sơ là một danh sách file (`profiles/<hồ-sơ>.txt`) hợp với một cỡ và một giai đoạn sống của dự án. Chọn theo hai câu hỏi:
 
 - **Cỡ:** dự án có người dùng thật không, có phải vận hành (deploy, trực sự cố, giữ dữ liệu) không, bao nhiêu người cùng làm.

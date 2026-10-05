@@ -1,9 +1,14 @@
-# Cấu trúc frontend React
+# Frontend Template
 
-Chọn topic này khi project có ứng dụng React với state, route và API. Nó tạo [mẫu `docs/dev/frontend.md`](files/docs/dev/frontend.md). Thay các ví dụ React và TanStack Query bằng lựa chọn thật của project; xoá phần không dùng.
+Topic này chứa kiến trúc frontend dùng lại cho các project React/TypeScript có state, form, API hoặc routing.
+
+Tài liệu chính hỗ trợ hai profile:
+
+- `react-spa`: ứng dụng client-side dùng router runtime.
+- `next-app-router`: ứng dụng Next.js dùng file-system routing và Server/Client Components.
+
+Mẫu tài liệu được tạo tại [`files/docs/dev/frontend.md`](files/docs/dev/frontend.md). Khi áp dụng, chọn một profile công nghệ, ghi quyết định vào ADR của project và xoá các phần không sử dụng.
 
 ```bash
 docs-template/scripts/new-project-docs.sh --topic frontend/react standard ../my-app "My App"
 ```
-
-Mẫu liên kết tới các tài liệu kiến trúc, API, cấu hình và kiểm thử của hồ sơ `standard`. Nếu có design system, thêm link tới `design-system.md` trong file được tạo. Hồ sơ `full` đã bao gồm file frontend.

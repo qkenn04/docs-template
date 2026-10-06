@@ -1,6 +1,6 @@
 # Frontend Template: Kiến trúc và quy ước dùng lại
 
-> Trạng thái: Template nền tảng · Cập nhật: 2026-10-05
+> Trạng thái: Template nền tảng · Cập nhật: YYYY-MM-DD
 > Phạm vi: Ứng dụng React + TypeScript có state, form, API hoặc routing
 > Nguyên tắc: framework và backend là profile lựa chọn; phần lõi không phụ thuộc một project cụ thể.
 > Phạm vi triển khai hiện tại: hoàn thiện hai frontend profile `react-spa` và `next-app-router` trước; API profile sẽ gắn sau.
@@ -847,7 +847,175 @@ Template là default có thể thay đổi bằng ADR; không phải luật cứ
 - [ ] Có ADR cho các lựa chọn khác default.
 - [ ] Template được thử trên ít nhất một app nhỏ trước khi mở rộng.
 
-## 22. Kết luận
+## 22. Quy tắc React và Hooks
+
+Phần này bổ sung các quy tắc về hành vi của React. Chọn các mục áp dụng cho framework của project; ví dụ Next.js có thể cung cấp cơ chế lấy dữ liệu riêng.
+
+### 22.1 Render chỉ tính UI
+
+Component phải có thể render lại an toàn với cùng props, state và context. Không gọi API, sửa DOM, ghi file hoặc thay đổi biến dùng chung trực tiếp trong thân component.
+
+```tsx
+// Sai: request chạy mỗi lần component render.
+function ProfilePage() {
+  fetch("/api/profile");
+  return <main>Profile</main>;
+}
+
+// Đúng: hành động do người dùng yêu cầu chạy trong handler.
+function SaveButton() {
+  async function handleSave() {
+    await saveProfile();
+  }
+
+  return <button onClick={handleSave}>Lưu</button>;
+}
+```
+
+Mutation trên biến cục bộ được tạo trong render vẫn được phép nếu nó không làm thay đổi dữ liệu tồn tại bên ngoài lần render đó. Mục tiêu là tránh side effect quan sát được trong render, không phải cấm mọi phép gán cục bộ.
+
+### 22.2 Props và state không bị sửa trực tiếp
+
+Props và state là snapshot dùng để tính UI. Tạo giá trị mới và dùng setter khi cập nhật state:
+
+```tsx
+setItems((currentItems) => [...currentItems, newItem]);
+
+setUser((currentUser) => ({
+  ...currentUser,
+  displayName: nextName,
+}));
+```
+
+Không gọi `push`, gán property hoặc xóa phần tử trực tiếp trên props/state. Mutation có thể không kích hoạt render và có thể làm ảnh hưởng nơi khác dùng cùng object.
+
+### 22.3 Gọi Hooks đúng vị trí
+
+Gọi Hook ở tầng trên cùng của function component hoặc custom Hook. Không gọi trong điều kiện, vòng lặp, callback, event handler, class component hoặc sau một nhánh return có điều kiện.
+
+```tsx
+// Sai: thứ tự Hook thay đổi theo enabled.
+if (enabled) {
+  useEffect(() => subscribe(), []);
+}
+
+// Đúng: Hook luôn được gọi; điều kiện nằm trong callback.
+useEffect(() => {
+  if (!enabled) return;
+  return subscribe();
+}, [enabled]);
+```
+
+Tên custom Hook bắt đầu bằng `use` và được gọi như Hook khác. Khai báo component ở cấp module; không định nghĩa component lồng trong component vì định nghĩa mới mỗi render có thể làm React remount cây con và mất state.
+
+### 22.4 Dependency của Hook phải đầy đủ
+
+Mọi giá trị reactive được đọc trong `useEffect`, `useMemo` hoặc `useCallback` phải được phản ánh trong dependency list, trừ các trường hợp React/library đảm bảo identity ổn định.
+
+```tsx
+useEffect(() => {
+  loadUser(userId);
+}, [userId]);
+```
+
+Thiếu dependency có thể làm closure dùng giá trị cũ. Khi `exhaustive-deps` báo lỗi, kiểm tra thiết kế và nơi logic nên chạy; không tắt rule chỉ để giữ lịch chạy mong muốn. Nếu Effect đang phụ thuộc nhiều giá trị thay đổi liên tục, tách logic hoặc chuyển thao tác do người dùng khởi tạo sang event handler.
+
+### 22.5 Dùng Effect để đồng bộ hệ thống bên ngoài
+
+Effect phù hợp khi component cần đồng bộ với browser API, timer, event listener, subscription, widget imperative hoặc nguồn bên ngoài React.
+
+Không dùng Effect chỉ để tính giá trị dẫn xuất:
+
+```tsx
+// Không cần Effect và state thứ hai.
+const fullName = `${firstName} ${lastName}`.trim();
+```
+
+Hành động xảy ra vì người dùng bấm nút thuộc event handler. Effect chạy vì component cần đồng bộ với hệ thống bên ngoài sau render. Lấy dữ liệu trong Effect chỉ dùng khi framework/query layer của project không cung cấp cơ chế phù hợp; khi tự fetch phải xử lý cleanup, lỗi và response đến sai thứ tự.
+
+### 22.6 Cấu trúc state
+
+- Mỗi giá trị state có một component sở hữu rõ ràng.
+- Đặt state gần nơi dùng; nâng lên tổ tiên chung khi nhiều component cần cùng dữ liệu.
+- Không lưu dữ liệu có thể tính từ props/state hiện có.
+- Tránh sao chép cùng một dữ liệu vào nhiều state và tránh tổ hợp trạng thái không hợp lệ.
+- Với cập nhật dựa trên giá trị trước, dùng functional updater.
+
+```tsx
+setCount((currentCount) => currentCount + 1);
+```
+
+State dùng chung có một nguồn sự thật giúp tránh các component hiển thị những giá trị khác nhau. Điều đó không có nghĩa là đưa toàn bộ state lên app root.
+
+### 22.7 Danh sách và key
+
+Mỗi phần tử JSX trực tiếp tạo trong list cần một key ổn định, duy nhất trong nhóm sibling:
+
+```tsx
+items.map((item) => <Row key={item.id} item={item} />);
+```
+
+Không dùng index nếu list có thể sắp xếp, thêm hoặc xóa phần tử; không tạo key mới trong render bằng `Math.random()`.
+
+Key cho React biết item nào được giữ, thêm hoặc xóa giữa các lần render. Key không phải prop; truyền ID riêng nếu component cần dùng ID đó.
+
+### 22.8 Form controls
+
+Chọn controlled hoặc uncontrolled cho mỗi input và giữ nguyên lựa chọn trong vòng đời component.
+
+```tsx
+const [email, setEmail] = useState("");
+
+<label htmlFor="email">Email</label>
+<input
+  id="email"
+  name="email"
+  value={email}
+  onChange={(event) => setEmail(event.target.value)}
+/>
+```
+
+Controlled input phải cập nhật state đồng bộ trong `onChange`; giá trị text nên luôn là string và checkbox/radio dùng boolean `checked`. Nếu chỉ cần giá trị ban đầu, dùng `defaultValue`/`defaultChecked`. Ghi rõ `type="button"` hoặc `type="submit"` cho button trong form.
+
+### 22.9 Semantic HTML và accessibility
+
+- Dùng phần tử HTML theo đúng vai trò: `button` cho hành động, `a` cho điều hướng, `label` cho input, các landmark như `main` và `nav` khi phù hợp.
+- Mọi input có nhãn truy cập được; mọi thao tác chính dùng được bằng bàn phím và có focus state nhìn thấy.
+- Ảnh có alt text theo mục đích; ảnh trang trí dùng alt rỗng.
+- Dùng ARIA khi HTML semantic không diễn đạt đủ, không thay semantic HTML bằng `div` có click handler.
+- Kiểm tra trạng thái loading, empty, error, disabled và success của luồng quan trọng.
+
+```tsx
+<button type="button" onClick={handleSave}>
+  Lưu
+</button>
+```
+
+### 22.10 Refs và memoization
+
+Ref dành cho giá trị imperative không cần render UI, như DOM node, timer ID hoặc tích hợp widget. Nếu giá trị thay đổi cần cập nhật UI, dùng state.
+
+Không thêm `memo`, `useMemo` hoặc `useCallback` theo thói quen. Dùng khi có bằng chứng về chi phí render/tính toán hoặc khi identity ổn định là yêu cầu của API. Memoization không sửa được state ownership hay dependency sai.
+
+### 22.11 Lint và test
+
+Bật `eslint-plugin-react-hooks` với preset `recommended` tương thích với phiên bản React và cấu hình project. Ít nhất cần bắt lỗi vị trí gọi Hook và dependency; xử lý các rule correctness khác theo output của plugin. Chẩn đoán compiler mới có thể được xử lý theo từng bước, không cần tắt toàn bộ plugin.
+
+Test theo hành vi người dùng: nội dung nhìn thấy, tương tác, loading/error/empty và các quyền quan trọng. Ưu tiên role/name truy cập được trong test. Tránh phụ thuộc state nội bộ hoặc snapshot lớn nếu chúng không bảo vệ yêu cầu.
+
+### 22.12 Tham khảo React
+
+- [Components and Hooks must be pure](https://react.dev/reference/rules/components-and-hooks-must-be-pure)
+- [Rules of Hooks](https://react.dev/reference/rules/rules-of-hooks)
+- [React Hooks ESLint plugin](https://react.dev/reference/eslint-plugin-react-hooks)
+- [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect)
+- [Choosing the State Structure](https://react.dev/learn/choosing-the-state-structure)
+- [Sharing State Between Components](https://react.dev/learn/sharing-state-between-components)
+- [Rendering Lists](https://react.dev/learn/rendering-lists)
+- [React input](https://react.dev/reference/react-dom/components/input)
+- [Responding to Events](https://react.dev/learn/responding-to-events)
+
+## 23. Kết luận
 
 Bộ khuôn được triển khai theo cấu trúc:
 
@@ -888,7 +1056,7 @@ import boundary + CI gate
 
 Mục tiêu của template không phải ép mọi project giống nhau. Mục tiêu là làm cho những quyết định lặp lại trở thành mặc định, còn những khác biệt thật sự được thể hiện rõ bằng profile và ADR.
 
-## 23. Tài liệu tham khảo
+## 24. Tài liệu tham khảo
 
 - [Next.js App Router](https://nextjs.org/docs/app)
 - [TanStack Query React](https://tanstack.com/query/latest/docs/framework/react)

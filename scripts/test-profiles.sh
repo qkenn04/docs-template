@@ -82,14 +82,18 @@ PY
   grep -q '^Tổng: 0 chép, '"$expected"' bỏ qua' "$work/$p.run2.log" || fail "$p: chạy lại không báo bỏ qua đủ $expected file"
 
   if [ "$p" = standard ] || [ "$p" = full ]; then
-    "$SCAFFOLD" --topic backend/nestjs --topic ci-cd/github-actions "$p" "$dir" "$NAME" > "$work/$p.topics.log"
+    "$SCAFFOLD" --topic backend/nestjs --topic ci-cd/github-actions \
+      --topic git/conventional-commits --topic javascript/airbnb \
+      "$p" "$dir" "$NAME" > "$work/$p.topics.log"
     [ -f "$dir/docs/dev/backend-nestjs.md" ] || fail "$p: thiếu topic NestJS"
     [ -f "$dir/docs/ops/ci-cd.md" ] || fail "$p: thiếu topic CI/CD"
+    [ -f "$dir/docs/dev/commit-conventions.md" ] || fail "$p: thiếu topic Conventional Commits"
+    [ -f "$dir/docs/dev/javascript-conventions.md" ] || fail "$p: thiếu topic JavaScript/Airbnb"
     python3 "$CHECK" --quiet "$dir" || fail "$p + topics: check-links báo lỗi"
   fi
   if [ "$p" = full ]; then
     "$SCAFFOLD" --topic frontend/react "$p" "$dir" "$NAME" > "$work/$p.frontend.log"
-    [ "$(find "$dir" -type f | wc -l | tr -d ' ')" = "$((expected + 2))" ] || fail "full + frontend: file trùng"
+    [ "$(find "$dir" -type f | wc -l | tr -d ' ')" = "$((expected + 4))" ] || fail "full + frontend: file trùng"
   fi
   if [ "$p" = standard ]; then
     "$SCAFFOLD" --topic frontend/react "$p" "$dir" "$NAME" > "$work/$p.frontend.log"
@@ -104,6 +108,16 @@ topic_dir="$work/topics"
 "$SCAFFOLD" --topic ci-cd/github-actions minimal "$topic_dir" "$NAME" > "$work/topics.log"
 [ -f "$topic_dir/docs/ops/ci-cd.md" ] || fail "minimal + CI/CD: thiếu file"
 python3 "$CHECK" --quiet "$topic_dir" || fail "minimal + CI/CD: check-links báo lỗi"
+for topic in git/conventional-commits javascript/airbnb; do
+  topic_dir="$work/$(basename "$topic")"
+  "$SCAFFOLD" --topic "$topic" minimal "$topic_dir" "$NAME" > "$work/$(basename "$topic").log"
+  case "$topic" in
+    git/conventional-commits) topic_file=docs/dev/commit-conventions.md ;;
+    javascript/airbnb) topic_file=docs/dev/javascript-conventions.md ;;
+  esac
+  [ -f "$topic_dir/$topic_file" ] || fail "minimal + $topic: thiếu $topic_file"
+  python3 "$CHECK" --quiet "$topic_dir" || fail "minimal + $topic: check-links báo lỗi"
+done
 "$SCAFFOLD" --dry-run --topic backend/nestjs standard "$work/dry-topic" "$NAME" > "$work/dry-topic.log"
 [ ! -e "$work/dry-topic" ] || fail "topic: --dry-run đã tạo thư mục"
 if "$SCAFFOLD" --topic backend/nestjs minimal "$work/invalid-topic" "$NAME" > "$work/invalid-topic.log" 2>&1; then

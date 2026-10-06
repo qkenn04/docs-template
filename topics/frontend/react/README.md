@@ -2,6 +2,8 @@
 
 Topic này chứa kiến trúc frontend dùng lại cho các project React/TypeScript có state, form, API hoặc routing.
 
+Nó cũng ghi convention React về render purity, immutable props/state, Hooks, state structure, Effects, lists, forms và accessibility. Đây là hướng dẫn cho code ứng dụng React; không thay thế cấu hình lint/test cụ thể của từng project.
+
 Tài liệu chính hỗ trợ hai profile:
 
 - `react-spa`: ứng dụng client-side dùng router runtime.

@@ -4,12 +4,14 @@ Profile quyết định số tài liệu chung. Topic thêm tài liệu cho côn
 
 | Topic | Thêm gì | Dùng khi |
 |---|---|---|
+| [git/conventional-commits](git/conventional-commits/README.md) | `docs/dev/commit-conventions.md` | Muốn commit history nhất quán; mọi profile |
+| [javascript/airbnb](javascript/airbnb/README.md) | `docs/dev/javascript-conventions.md` | Project JavaScript/TypeScript cần quy ước chung chọn lọc; mọi profile |
 | [frontend/react](frontend/react/README.md) | `docs/dev/frontend.md` | Ứng dụng React có state và gọi API; `standard`/`full` |
 | [backend/nestjs](backend/nestjs/README.md) | `docs/dev/backend-nestjs.md` | Back-end NestJS; `standard`/`full` |
 | [ci-cd/github-actions](ci-cd/github-actions/README.md) | `docs/ops/ci-cd.md` | Cần mô tả quy trình GitHub Actions |
 
 ```bash
-docs-template/scripts/new-project-docs.sh --topic backend/nestjs --topic ci-cd/github-actions standard ../my-app "My App"
+docs-template/scripts/new-project-docs.sh --topic backend/nestjs --topic ci-cd/github-actions --topic git/conventional-commits --topic javascript/airbnb standard ../my-app "My App"
 ```
 
 Script chỉ thêm file còn thiếu. Chạy lại cùng profile với topic mới cũng được; file cũ được giữ nguyên. `full` đã gồm `docs/dev/frontend.md`, nên chọn thêm `frontend/react` sẽ không tạo file trùng. Topic CI/CD là **mẫu tài liệu**, chưa tạo workflow có thể chạy vì lệnh build, test và deploy phải lấy từ project thực tế.

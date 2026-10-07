@@ -1,0 +1,7 @@
+docs/ops/ci-cd-core.md
+docs/ops/providers/github-actions-ghcr.md
+docs/ops/providers/gitlab-ci-registry.md
+docs/ops/providers/jenkins-registry.md
+docs/ops/runtimes/vps-docker-compose.md
+docs/ops/runtimes/kubernetes.md
+docs/ops/runtimes/managed-container-platform.md

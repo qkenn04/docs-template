@@ -42,7 +42,7 @@ EOF
 
 Ví dụ:
   $(basename "$0") standard ../my-app "My App"
-  $(basename "$0") --topic backend/nestjs --topic ci-cd/github-actions standard ../my-app "My App"
+  $(basename "$0") --topic backend/nestjs --topic ci-cd/delivery standard ../my-app "My App"
   $(basename "$0") --dry-run lite .
 EOF
 }

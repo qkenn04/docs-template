@@ -82,18 +82,30 @@ PY
   grep -q '^Tổng: 0 chép, '"$expected"' bỏ qua' "$work/$p.run2.log" || fail "$p: chạy lại không báo bỏ qua đủ $expected file"
 
   if [ "$p" = standard ] || [ "$p" = full ]; then
-    "$SCAFFOLD" --topic backend/nestjs --topic ci-cd/github-actions \
+    "$SCAFFOLD" --topic backend/nestjs --topic ci-cd/delivery \
       --topic git/conventional-commits --topic javascript/airbnb \
       "$p" "$dir" "$NAME" > "$work/$p.topics.log"
     [ -f "$dir/docs/dev/backend-nestjs.md" ] || fail "$p: thiếu topic NestJS"
-    [ -f "$dir/docs/ops/ci-cd.md" ] || fail "$p: thiếu topic CI/CD"
+    [ -f "$dir/docs/ops/ci-cd-core.md" ] || fail "$p: thiếu core policy CI/CD"
+    [ -f "$dir/docs/ops/providers/github-actions-ghcr.md" ] || fail "$p: thiếu provider GitHub Actions + GHCR"
+    [ -f "$dir/docs/ops/runtimes/vps-docker-compose.md" ] || fail "$p: thiếu runtime VPS + Docker Compose"
+    while IFS= read -r topic_file; do
+      [ -f "$dir/$topic_file" ] || fail "$p: thiếu CI/CD adapter $topic_file"
+      if [ -f "$dir/$topic_file" ]; then
+        topic_meta="$(grep -m1 '^> Trạng thái:' "$dir/$topic_file" || true)"
+        case "$topic_meta" in *"Cập nhật: $today"*) ;; *) fail "$p: ngày metadata CI/CD chưa điền: $topic_file" ;; esac
+      fi
+    done < "$KIT_DIR/topics/ci-cd/delivery/files.txt"
+    if grep -REn 'Planned adapter|00-ci-cd-core\.md|Cập nhật: [0-9]{2}/[0-9]{2}/[0-9]{4}' "$dir/docs/ops/ci-cd-core.md" "$dir/docs/ops/providers" "$dir/docs/ops/runtimes"; then
+      fail "$p: CI/CD còn adapter dự kiến, đường dẫn core sai hoặc ngày cố định trong thân bài"
+    fi
     [ -f "$dir/docs/dev/commit-conventions.md" ] || fail "$p: thiếu topic Conventional Commits"
     [ -f "$dir/docs/dev/javascript-conventions.md" ] || fail "$p: thiếu topic JavaScript/Airbnb"
     python3 "$CHECK" --quiet "$dir" || fail "$p + topics: check-links báo lỗi"
   fi
   if [ "$p" = full ]; then
     "$SCAFFOLD" --topic frontend/react "$p" "$dir" "$NAME" > "$work/$p.frontend.log"
-    [ "$(find "$dir" -type f | wc -l | tr -d ' ')" = "$((expected + 4))" ] || fail "full + frontend: file trùng"
+    [ "$(find "$dir" -type f | wc -l | tr -d ' ')" = "$((expected + 10))" ] || fail "full + topics: file trùng"
   fi
   if [ "$p" = standard ]; then
     "$SCAFFOLD" --topic frontend/react "$p" "$dir" "$NAME" > "$work/$p.frontend.log"
@@ -105,8 +117,11 @@ done
 
 printf '== topic độc lập\n'
 topic_dir="$work/topics"
-"$SCAFFOLD" --topic ci-cd/github-actions minimal "$topic_dir" "$NAME" > "$work/topics.log"
-[ -f "$topic_dir/docs/ops/ci-cd.md" ] || fail "minimal + CI/CD: thiếu file"
+"$SCAFFOLD" --topic ci-cd/delivery minimal "$topic_dir" "$NAME" > "$work/topics.log"
+[ -f "$topic_dir/docs/ops/ci-cd-core.md" ] || fail "minimal + CI/CD: thiếu core policy"
+while IFS= read -r topic_file; do
+  [ -f "$topic_dir/$topic_file" ] || fail "minimal + CI/CD: thiếu $topic_file"
+done < "$KIT_DIR/topics/ci-cd/delivery/files.txt"
 python3 "$CHECK" --quiet "$topic_dir" || fail "minimal + CI/CD: check-links báo lỗi"
 for topic in git/conventional-commits javascript/airbnb; do
   topic_dir="$work/$(basename "$topic")"

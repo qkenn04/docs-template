@@ -48,10 +48,10 @@ File .env.example ở gốc repo liệt kê cùng các tên biến (không giá 
 
 ## 4. Khác nhau theo môi trường
 
-| Biến | dev | CI | prod |
-|---|---|---|---|
-| `APP_ENV` | `development` | `test` | `production` |
-| <…> | <…> | <…> | <…> |
+| Biến | dev | CI | staging (nếu có) | prod |
+|---|---|---|---|---|
+| `APP_ENV` | `development` | `test` | `staging` | `production` |
+| <…> | <…> | <…> | <…> | <…> |
 
 ## 5. Bí mật: nơi giữ, xoay vòng, thu hồi
 

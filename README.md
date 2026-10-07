@@ -1,6 +1,6 @@
 # docs-template
 
-> Trạng thái: Đang áp dụng · Cập nhật: 2026-10-05 · Liên quan: [Chọn hồ sơ](PROFILES.md), [Topic](topics/README.md), [Mẫu docs/README](template/docs/README.md), [Script dựng](scripts/new-project-docs.sh), [Kiểm link](scripts/check-links.py)
+> Trạng thái: Đang áp dụng · Cập nhật: 2026-10-07 · Liên quan: [Chọn hồ sơ](PROFILES.md), [Topic](topics/README.md), [Mẫu docs/README](template/docs/README.md), [Script dựng](scripts/new-project-docs.sh), [Kiểm link](scripts/check-links.py)
 
 Bộ khuôn tài liệu phân tầng để dùng lại cho mọi dự án. Repo này **không** là tài liệu của một dự án nào. Nó gồm ba thứ:
 
@@ -23,7 +23,7 @@ docs-template/scripts/new-project-docs.sh minimal ../my-app "My App"
 
 Muốn bộ tài liệu phân tầng đầy đủ hơn thì chọn một hồ sơ trong [PROFILES.md](PROFILES.md); lệnh giống trên, thay `minimal` bằng tên hồ sơ.
 
-Muốn thêm một chủ đề cụ thể thì dùng `--topic`; ví dụ: `--topic backend/nestjs --topic ci-cd/github-actions`. Xem [danh sách topic](topics/README.md). Có thể chạy lại trên project đã có: script chỉ thêm file còn thiếu.
+Muốn thêm một chủ đề cụ thể thì dùng `--topic`; ví dụ: `--topic backend/nestjs --topic ci-cd/delivery`. Xem [danh sách topic](topics/README.md). Có thể chạy lại trên project đã có: script chỉ thêm file còn thiếu.
 
 Mục lục: [1. Khung tài liệu](#1-khung-tài-liệu) · [2. Hồ sơ](#2-hồ-sơ) · [3. Quy tắc tách file](#3-quy-tắc-tách-file) · [4. Quy ước](#4-quy-ước) · [5. Definition of Done cho tài liệu](#5-definition-of-done-cho-tài-liệu) · [6. Quy tắc ADR](#6-quy-tắc-adr) · [7. Spec, lộ trình, việc, tiến độ](#7-spec-lộ-trình-việc-tiến-độ) · [8. Cách dùng](#8-cách-dùng) · [9. Giữ tài liệu sống](#9-giữ-tài-liệu-sống) · [10. Bảo trì bộ khuôn](#10-bảo-trì-bộ-khuôn)
 
@@ -226,7 +226,7 @@ Mỗi loại thông tin có đúng một nơi là nguồn sự thật; nơi khá
 ```bash
 tmp="$(mktemp -d)"
 scripts/new-project-docs.sh --topic backend/nestjs standard "$tmp" "Tên dự án"    # bỏ --topic nếu không dùng NestJS
-git rm -rq README.md PROFILES.md template topics profiles scripts/new-project-docs.sh scripts/test-profiles.sh
+git rm -rq README.md PROFILES.md template topics profiles scripts/new-project-docs.sh scripts/test-profiles.sh .github/workflows/docs.yml
 cp -R "$tmp"/. . && rm -rf "${tmp:?}"
 python3 scripts/check-links.py .
 git add -A && git commit -m "Add project docs from docs-template (standard profile)"
@@ -280,7 +280,7 @@ python3 scripts/check-links.py .
 ## 9. Giữ tài liệu sống
 
 - **Mỗi PR** theo Definition of Done ở mục 5; mẫu PR nhắc từng mục.
-- **CI kiểm link** trên mọi PR, ví dụ:
+- Repo bộ khuôn chạy [workflow kiểm profile và link](.github/workflows/docs.yml) trên PR và khi push vào `main`. Khi dựng project từ bộ khuôn, tạo workflow docs riêng cho project; ví dụ:
 
 ```yaml
 # .github/workflows/docs.yml
@@ -290,7 +290,7 @@ jobs:
   links:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - run: python3 scripts/check-links.py .
 ```
 

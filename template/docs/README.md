@@ -32,7 +32,7 @@ Bộ tài liệu của <Tên dự án> theo khung phân tầng: mỗi thư mục
 | Làm theo thứ tự nào, tới đâu rồi? | [plan/roadmap.md](plan/roadmap.md), [plan/tasks.md](plan/tasks.md), [plan/progress.md](plan/progress.md) | T2 |
 | Từng tính năng làm thế nào? | `specs/NNN-<name>/`: spec.md, plan.md, tasks.md | T2 |
 | Đề xuất lớn nào đang bàn? | `design/NNNN-<name>.md` (RFC) | T3 |
-| Chạy và xử lý sự cố thế nào? | [ops/deployment.md](ops/deployment.md), [runbook](ops/runbooks/README.md) (T2); [postmortem](ops/postmortems/README.md) sau mỗi sự cố (T1\*) | T2 |
+| Chạy và xử lý sự cố thế nào? | [ops/deployment.md](ops/deployment.md), [runbook](ops/runbooks/README.md) (T2); [postmortem](ops/postmortems/README.md) sau mỗi sự cố (T1\*). Nếu dùng topic CI/CD: đổi `ops/ci-cd-core.md` và adapter đã chọn thành link sau khi sinh | T2 |
 
 Tầng: **T1** bắt buộc · **T1\*** bắt buộc có điều kiện · **T2** nên có khi dự án có khía cạnh đó · **T3** tuỳ chọn cho dự án lớn.
 

@@ -123,15 +123,27 @@ while IFS= read -r topic_file; do
   [ -f "$topic_dir/$topic_file" ] || fail "minimal + CI/CD: thiếu $topic_file"
 done < "$KIT_DIR/topics/ci-cd/delivery/files.txt"
 python3 "$CHECK" --quiet "$topic_dir" || fail "minimal + CI/CD: check-links báo lỗi"
-for topic in git/conventional-commits javascript/airbnb observability/startup-information; do
+for topic in git/conventional-commits javascript/airbnb javascript/prettier observability/startup-information; do
   topic_dir="$work/$(basename "$topic")"
   "$SCAFFOLD" --topic "$topic" minimal "$topic_dir" "$NAME" > "$work/$(basename "$topic").log"
   case "$topic" in
     git/conventional-commits) topic_file=docs/dev/commit-conventions.md ;;
     javascript/airbnb) topic_file=docs/dev/javascript-conventions.md ;;
+    javascript/prettier) topic_file=docs/dev/formatting.md ;;
     observability/startup-information) topic_file=docs/ops/startup-information.md ;;
   esac
   [ -f "$topic_dir/$topic_file" ] || fail "minimal + $topic: thiếu $topic_file"
+  if [ "$topic" = javascript/prettier ]; then
+    [ -f "$topic_dir/.prettierrc.json" ] || fail "minimal + Prettier: thiếu cấu hình"
+    [ -f "$topic_dir/.prettierignore" ] || fail "minimal + Prettier: thiếu file ignore"
+    python3 -m json.tool "$topic_dir/.prettierrc.json" > /dev/null || fail "minimal + Prettier: JSON không hợp lệ"
+    grep -q "Cập nhật: $today" "$topic_dir/docs/dev/formatting.md" || fail "minimal + Prettier: ngày metadata chưa điền"
+    before="$(cd "$topic_dir" && find . -type f -exec md5sum {} + | sort)"
+    "$SCAFFOLD" --topic "$topic" minimal "$topic_dir" "$NAME" > "$work/prettier-again.log"
+    after="$(cd "$topic_dir" && find . -type f -exec md5sum {} + | sort)"
+    [ "$before" = "$after" ] || fail "minimal + Prettier: chạy lại đã đổi file"
+    grep -q '^Tổng: 0 chép, 4 bỏ qua' "$work/prettier-again.log" || fail "minimal + Prettier: chạy lại không bỏ qua đủ file"
+  fi
   python3 "$CHECK" --quiet "$topic_dir" || fail "minimal + $topic: check-links báo lỗi"
 done
 "$SCAFFOLD" --dry-run --topic backend/nestjs standard "$work/dry-topic" "$NAME" > "$work/dry-topic.log"

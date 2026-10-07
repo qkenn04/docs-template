@@ -8,6 +8,7 @@ Profile quyết định số tài liệu chung. Topic thêm tài liệu cho côn
 |---|---|---|
 | [git/conventional-commits](git/conventional-commits/README.md) | `docs/dev/commit-conventions.md` | Muốn commit history nhất quán; mọi profile |
 | [javascript/airbnb](javascript/airbnb/README.md) | `docs/dev/javascript-conventions.md` | Project JavaScript/TypeScript cần quy ước chung chọn lọc; mọi profile |
+| [javascript/prettier](javascript/prettier/README.md) | `.prettierrc.json`, `.prettierignore`, `docs/dev/formatting.md` | Project JavaScript/TypeScript cần định dạng thống nhất; mọi profile |
 | [frontend/react](frontend/react/README.md) | `docs/dev/frontend.md` | Ứng dụng React có state và gọi API; `standard`/`full` |
 | [backend/nestjs](backend/nestjs/README.md) | `docs/dev/backend-nestjs.md` | Back-end NestJS; `standard`/`full` |
 | [observability/startup-information](observability/startup-information/README.md) | `docs/ops/startup-information.md` | Quy ước thông tin khởi động hoặc bản triển khai; mọi profile, nhiều loại ứng dụng |

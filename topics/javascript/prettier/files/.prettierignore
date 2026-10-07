@@ -1,0 +1,5 @@
+# Generated output. Add project-specific generated paths here.
+dist/
+build/
+coverage/
+.next/

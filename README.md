@@ -7,7 +7,7 @@ Bộ khuôn tài liệu phân tầng để dùng lại cho mọi dự án. Repo 
 - **Mẫu** cho từng ô của khung tài liệu (`template/`): mỗi file có sẵn các mục, comment hướng dẫn bằng tiếng Việt, placeholder và ví dụ được đánh dấu là ví dụ.
 - **Hồ sơ** (`profiles/`): mỗi loại dự án cần những ô nào. Chọn hồ sơ nào: [PROFILES.md](PROFILES.md).
 - **Script** (`scripts/`): dựng bộ tài liệu theo hồ sơ vào một repo mới hoặc có sẵn, và kiểm link.
-- **Topic** (`topics/`): mẫu chọn thêm theo công nghệ hoặc công việc, như React, NestJS và CI/CD.
+- **Topic** (`topics/`): mẫu chọn thêm theo công nghệ hoặc công việc, như React, NestJS, CI/CD và [Prettier](topics/javascript/prettier/README.md). Một số topic thêm file cấu hình bên cạnh tài liệu.
 
 Bộ khuôn dùng được ngay; nó không có bước "hoàn tất tài liệu". Việc điền nội dung thuộc về từng dự án, sau khi dựng.
 

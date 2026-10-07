@@ -1,0 +1,3 @@
+.prettierrc.json
+.prettierignore
+docs/dev/formatting.md

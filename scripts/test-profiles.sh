@@ -123,12 +123,13 @@ while IFS= read -r topic_file; do
   [ -f "$topic_dir/$topic_file" ] || fail "minimal + CI/CD: thiếu $topic_file"
 done < "$KIT_DIR/topics/ci-cd/delivery/files.txt"
 python3 "$CHECK" --quiet "$topic_dir" || fail "minimal + CI/CD: check-links báo lỗi"
-for topic in git/conventional-commits javascript/airbnb; do
+for topic in git/conventional-commits javascript/airbnb observability/startup-information; do
   topic_dir="$work/$(basename "$topic")"
   "$SCAFFOLD" --topic "$topic" minimal "$topic_dir" "$NAME" > "$work/$(basename "$topic").log"
   case "$topic" in
     git/conventional-commits) topic_file=docs/dev/commit-conventions.md ;;
     javascript/airbnb) topic_file=docs/dev/javascript-conventions.md ;;
+    observability/startup-information) topic_file=docs/ops/startup-information.md ;;
   esac
   [ -f "$topic_dir/$topic_file" ] || fail "minimal + $topic: thiếu $topic_file"
   python3 "$CHECK" --quiet "$topic_dir" || fail "minimal + $topic: check-links báo lỗi"
